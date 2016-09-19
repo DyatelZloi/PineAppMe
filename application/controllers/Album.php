@@ -28,14 +28,18 @@ class Album extends CI_Controller{
         if($this->session->userdata('id_user') == null){
             if ($id_user != null){
                 $query = $this->getAllAlbumsByUser($id_user);
+                //$sql = "SELECT * FROM users WHERE id_user = ".$this->db->escape($this->session->userdata('id_user'));
+                //$query2 = $this->db->query();
                 $this->load->view('header', array('title' => 'Альбомы'));
-                $this->load->view('albums', array('error' => ' ', 'albums' => $query));
+                $this->load->view('albums', array('error' => ' ', 'albums' => $query ));
                 $this->load->view('footer');
             }
         } else {
             $id_user = $this->session->userdata('id_user');
             $query = $this->getAllAlbumsByUser($id_user);
-            $this->load->view('header', array('title' => 'Альбомы'));
+            //$sql = "SELECT * FROM users WHERE id_user = ".$this->db->escape($this->session->userdata('id_user'));
+            //$query2 = $this->db->query();
+                $this->load->view('header', array('title' => 'Альбомы'));
             $this->load->view('albums', array('error' => ' ', 'albums' => $query));
             $this->load->view('footer');
         }
@@ -71,8 +75,7 @@ class Album extends CI_Controller{
                 $config['max_height']  = '2000';
                 $this->load->library('upload', $config);
                 if (!$this->upload->do_upload()) {
-                    $error = array('error' => $this->upload->display_errors());
-                    echo $error;
+                    echo 'Ошибка';
                 } else {
                     $data = array('upload_data' => $this->upload->data());
                     $file_name = array();
@@ -93,23 +96,26 @@ class Album extends CI_Controller{
                     $this->load->library('image_lib', $config);
                     $this->image_lib->resize();
                 }
+                redirect('http://pineappme:81/index.php/user/home_page/'.$this->session->userdata('id_user'), 'refresh');
             }
         } else echo 'Залогиньтесь';
     }
 
     //Получаем все альбомы этого юзера по ИД
     private function getAllAlbumsByUser($id_user){
-        $sql = "SELECT * FROM `albums` WHERE id_user = ".(string)$this->db->escape($id_user);
+        $sql = "SELECT * FROM `users` LEFT OUTER JOIN albums USING (id_user) WHERE id_user =".(string)$this->db->escape($id_user);
         $query = $this->db->query($sql);
         return $query;
     }
 
+    //TODO удаление картинок тоже
     //Удаление альбома по названию
     public function delAlbumByName(){
         if($this->input->post('name')){
             $name = $this->input->post('name');
             $sql = "DELETE FROM `albums` WHERE name = ".(string)$this->db->escape($name);
             $query = $this->db->query($sql);
+            redirect('http://pineappme:81/index.php/user/home_page/'.$this->session->userdata('id_user'), 'refresh');
         }
     }
 
@@ -122,6 +128,7 @@ class Album extends CI_Controller{
                 $this->db->escape($id)." AND id_user = ".
                 (string)$this->db->escape($id_user);
             $query = $this->db->query($sql);
+            redirect('http://pineappme:81/index.php/user/home_page/'.$this->session->userdata('id_user'), 'refresh');
         }
     }
 

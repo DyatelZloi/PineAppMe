@@ -1,5 +1,6 @@
 <ul>
     <?php foreach ($albums->result_array() as $row): ?>
+        <?php if ($row['id_album'] != null): ?>
         <li><?php echo $row['id_album']?></li> <br>
         <li><?php echo $row['name']?></li> <br>
         <li><?php echo $row['about']?></li> <br>
@@ -17,6 +18,7 @@
                 <a href="http://pineappme:81/index.php/Album/getImagesFromAlbum/<?php echo $row['id_album']?>">Посмотреть альбом</a>
             <?php endif; ?>
         <br>
+        <?php endif; ?>
     <?php endforeach; ?>
 </ul>
 <?php if ($this->session->userdata('id_user') == $row['id_user']): ?>
@@ -24,3 +26,4 @@
         <li> <a href="http://pineappme:81/index.php/Album/newAlbum/"> Создать новый альбом </a> </li>
     </ul>
 <?php endif ?>
+

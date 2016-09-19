@@ -33,7 +33,7 @@ class Subscription extends CI_Controller{
                 " AND id_user =".(string)$this->db->escape($id_user);
             $query = $this->db->query($sql);
             $this->load->view('header');
-            $this->load->view('subscribe_success');
+            $this->load->view('unsubscribe_success');
             $this->load->view('footer');
         } else echo 'Не ввели данные';
     }

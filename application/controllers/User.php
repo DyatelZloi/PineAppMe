@@ -1,7 +1,6 @@
 <?php
 class User extends CI_Controller{
 
-    //I very sad, because i can't make this method is a private
     public function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
@@ -37,13 +36,40 @@ class User extends CI_Controller{
                 $this->session->set_userdata($newdata);
             }
         }
+    }
+
+    //Функция логина с редиректом
+    public function login2(){
+        $this->form_validation->set_rules('email', 'Email адрес', 'required');
+        $this->form_validation->set_rules('password', 'Пароль', 'required');
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('auth');
+            $this->load->view('footer');
+        } else {
+            $email = $this->input->post('email');
+            $password = $this->input->post('password');
+            $this->logout();
+            $user = $this->getByEmail($email);
+            $us_pass = $user['password'];
+            if ($user == null) return false;
+            if ($us_pass == $password){
+                $newdata = array(
+                    'id_user' => $user['id_user'],
+                    'name'  => $user['name'],
+                    'email'     => $user['email'],
+                    'logged_in' => TRUE
+                );
+                $this->session->set_userdata($newdata);
+            }
+        }
         redirect('http://pineappme:81/index.php/', 'refresh');
     }
+
 
     //TODO вынести правила в отдельный файл конфигурации
     //Функция регистрации нового пользователя
     public function registration(){
-        $this->form_validation->set_rules('id_user', 'Страница пользователя', 'required|min_length[5]|max_length[12]|is_unique[users.id_user]');
+        $this->form_validation->set_rules('id_user', 'Страница пользователя', 'required|min_length[5]|max_length[50]|is_unique[users.id_user]');
         $this->form_validation->set_rules('name', 'Имя пользователя', 'required');
         $this->form_validation->set_rules('email', 'Email адрес', 'required|valid_email|is_unique[users.email]');
         $this->form_validation->set_rules('password', 'Пароль', 'required');
@@ -200,5 +226,5 @@ class User extends CI_Controller{
         $this->load->view('allusers', array('object' => $object));
         $this->load->view('footer');
     }
-    //Почти 4 часа, а мы тут одни сидим, забавно получается.
+
 }

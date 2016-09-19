@@ -3,17 +3,12 @@
         <head>
             <title><?php $title = !empty($title) ? $title : 'Какой-то тайтл'; echo $title?></title>
             <meta charset="UTF-8">
-            <script type="text/javascript" src="../../js/jquery-3.1.0.min.js"></script>
-            <script type="text/javascript" src="../../js/scripts.js"></script>
+            <script type="text/javascript" src="/../../js/jquery-3.1.0.min.js"></script>
+            <script type="text/javascript" src="/../../js/scripts.js"></script>
         </head>
         <body>
             <?php
             if ($this->input->post('token')){
-                //Предположительно проблем с логином не будет в будущем, если только юзер не захочет заходить через емайл и пароль
-                //Поменяв затем что-нибудь плохое, возможно стоит запретить менять емайл
-                //TODO проверка на уникальность емайла, если такой уже есть, значит аторизуем пользователя, а не создаём нового
-                //Хотя в данный момент это как готово
-                //TODO генерация случайного пароля
                 $s = file_get_contents('http://ulogin.ru/token.php?token=' . $_POST['token'] . '&host=' . $_SERVER['HTTP_HOST']);
                 $user = json_decode($s, true);
                 $id_user = $user['first_name'];
@@ -72,6 +67,6 @@
                 <br>
             <?php endif; ?>
             <br>
-            <a href="http://pineappme:81/index.php/image/getPopular"> Просмотреть самое просматриваемое</a>
-            <a href="http://pineappme:81/index.php/image/getFavourite">Просмотреть самое понравившееся</a>
-            <a href="http://pineappme:81/index.php/user/getAllUsers"> Все пользователи </a>
+            <a href="http://pineappme:81/index.php/image/getPopular"> Популярные </a>
+            <a href="http://pineappme:81/index.php/image/getFavourite"> Интересные </a>
+            <a href="http://pineappme:81/index.php/user/getAllUsers"> Люди</a>

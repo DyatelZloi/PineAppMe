@@ -2,9 +2,7 @@
 class Image extends CI_Controller{
 
     //TODO дата добавления картинки
-    //TODO подумай о замене $this->input->post('id') на $this->input->('id', TRUE);
     //TODO заменить echo на посмотри документацию
-    //So sad, because i can't make this method is a private
     public function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
@@ -124,7 +122,7 @@ class Image extends CI_Controller{
             $id_album = $this->input->post('id_album');
             $config['upload_path'] = './uploads/';
             $config['allowed_types'] = 'gif|jpg|png';
-            $config['max_size']	= '1024';
+            $config['max_size']	= '2048';
             $config['max_width']  = '2000';
             $config['max_height']  = '2000';
             $this->load->library('upload', $config);
