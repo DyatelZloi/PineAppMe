@@ -2,8 +2,6 @@
 class Album extends CI_Controller{
 
     //TODO проверки, кучу проверок.
-
-    //I very sad, because i can't make this method is a private
     public function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
@@ -28,8 +26,6 @@ class Album extends CI_Controller{
         if($this->session->userdata('id_user') == null){
             if ($id_user != null){
                 $query = $this->getAllAlbumsByUser($id_user);
-                //$sql = "SELECT * FROM users WHERE id_user = ".$this->db->escape($this->session->userdata('id_user'));
-                //$query2 = $this->db->query();
                 $this->load->view('header', array('title' => 'Альбомы'));
                 $this->load->view('albums', array('error' => ' ', 'albums' => $query ));
                 $this->load->view('footer');
@@ -37,8 +33,6 @@ class Album extends CI_Controller{
         } else {
             $id_user = $this->session->userdata('id_user');
             $query = $this->getAllAlbumsByUser($id_user);
-            //$sql = "SELECT * FROM users WHERE id_user = ".$this->db->escape($this->session->userdata('id_user'));
-            //$query2 = $this->db->query();
                 $this->load->view('header', array('title' => 'Альбомы'));
             $this->load->view('albums', array('error' => ' ', 'albums' => $query));
             $this->load->view('footer');
@@ -187,4 +181,7 @@ class Album extends CI_Controller{
             $this->load->view('footer');
         }
     }
+
+    //Эй, уже скоро клиенты примчатся, где вы шеф? Я же так и разрыв сердца получу. Всё будет хорошо.
+
 }

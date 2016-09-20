@@ -4,7 +4,7 @@
             <?php echo form_open_multipart('user/edit/') ?>
             <label>
                 Айди
-                <input type="text" name="id_user" value="<?php $id_user = set_value('name');echo $id_user = !empty($id_user) ? $id_user : $row['id_user']; ?>"><br>
+                <input type="text" name="id_user" value="<?php $id_user = set_value('id_user');echo $id_user = !empty($id_user) ? $id_user : $row['id_user']; ?>"><br>
             </label>
             <br>
             <label>

@@ -1,6 +1,7 @@
 <?php
 class User extends CI_Controller{
 
+    //TODO проверки, кучу проверок.
     public function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));

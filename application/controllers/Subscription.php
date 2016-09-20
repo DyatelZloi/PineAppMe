@@ -1,7 +1,7 @@
 <?php
 class Subscription extends CI_Controller{
 
-    //I very sad, because i can't make this method is a private
+    //TODO проверки, кучу проверок.
     public function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
@@ -45,8 +45,11 @@ class Subscription extends CI_Controller{
             $sql = "SELECT * FROM subscribers JOIN users WHERE subscribers.id_user =".(string)$this->db->escape($id_user).
                 " AND users.id_user = subscribers.id_subscriber";
             $query = $this->db->query($sql);
+            $sql = "SELECT * FROM messages WHERE id_user =".(string)$this->db->escape($this->session->userdata('id_user')).
+                   " OR id_companion =".(string)$this->db->escape($this->session->userdata('id_user'));
+            $query2 = $this->db->query($sql);
             $this->load->view('header', array('title' => 'Подписчики'));
-            $this->load->view('subscribe', array('object' => $query));
+            $this->load->view('subscribe', array('object' => $query, 'messages' => $query2));
             $this->load->view('footer');
         }
     }

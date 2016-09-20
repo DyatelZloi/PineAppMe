@@ -1,10 +1,10 @@
 <ul>
     <?php foreach ($albums->result_array() as $row): ?>
         <?php if ($row['id_album'] != null): ?>
-        <li><?php echo $row['id_album']?></li> <br>
-        <li><?php echo $row['name']?></li> <br>
-        <li><?php echo $row['about']?></li> <br>
-        <li><?php echo $row['id_user']?></li> <br>
+        <li> id альбома : <?php echo $row['id_album']?></li> <br>
+        <li> Название : <?php echo $row['name']?></li> <br>
+        <li> Описание : <?php echo $row['about']?></li> <br>
+        <li> id создавшего : <?php echo $row['id_user']?></li> <br>
         <li><img src = "<?php echo '/../../img/mini/'.$row['сover']?>"></li> <br>
             <?php if ($this->session->userdata('id_user') == $row['id_user']): ?>
                 <?php echo form_open('album/delAlbumById/') ?>

@@ -1,5 +1,8 @@
 <?php foreach ($images_data->result_array() as $row): ?>
-    <p><?php echo $row['id_image']?></p>
+    <p> id картинки : <?php echo $row['id_image']?></p>
+    <p> id пользователя : <?php echo $row['id_user']?></p>
+    <p> просмотры : <?php echo $row['views']?></p>
+    <p> количество лайков : <?php echo $row['likes']?></p>
     <br>
     <img class="img-thumbnail" src="<?php echo '/../../uploads/'.$row['path']; ?>">
     <br>
@@ -24,6 +27,7 @@
     </div>
 <?php endforeach; ?>
 <ul id="delete">
+        <li> Лайкнувшие пользователи : </li>
     <?php foreach ($like_data->result_array() as $row): ?>
         <li id = "<?php echo $row['id_user']?>" value="<?php echo $row['id_user']?>"><?php echo $row['id_user']?></li>
     <?php endforeach; ?>

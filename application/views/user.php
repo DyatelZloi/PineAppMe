@@ -14,20 +14,21 @@
             <input type="submit" value="Подписчики">
         </form>
             <a href="http://pineappme:81/index.php/album/getAlbums/<?php echo $row['id_user']?>"> Альбомы </a>
-        <li><?php echo $row['id_user']?></li> <br>
-        <li><?php echo $row['name']?></li> <br>
-        <li><?php echo $row['email']?></li> <br>
-        <li><?php echo $row['about']?></li> <br>
-        <li><?php echo $row['sity']?></li> <br>
-        <li><?php echo $row['birthday']?></li> <br>
+        <li>Страница  : <?php echo $row['id_user']?></li> <br>
+        <li>Имя  : <?php echo $row['name']?></li> <br>
+        <li>Емайл : <?php echo $row['email']?></li> <br>
+        <li>Обо мне : <?php echo $row['about']?></li> <br>
+        <li>Город : <?php echo $row['sity']?></li> <br>
+        <li>День рожденья : <?php echo $row['birthday']?></li> <br>
         <li><?php echo $row['role']?></li> <br>
         <li><?php echo $row['img']?></li> <br>
     <?php endforeach; ?>
 </ul>
 <ul>
     <?php foreach ($images->result_array() as $row): ?>
-        <li><?php echo $row['id_image']?></li> <br>
-        <li><?php echo $row['views']?></li> <br>
+        <li> id : <?php echo $row['id_image']?></li> <br>
+        <li> просмотры :<?php echo $row['views']?></li> <br>
+        <li> лайки :<?php echo $row['likes']?></li> <br>
         <li><img src="/../../uploads/<?php echo $row['path']?>"</li> <br>
         <li><?php echo $row['id_album']?></li> <br>
         <?php if ($this->session->userdata('id_user') == $row['id_user']): ?>

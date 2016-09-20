@@ -1,6 +1,7 @@
 <?php
 class Image extends CI_Controller{
 
+    //TODO проверки, кучу проверок.
     //TODO дата добавления картинки
     //TODO заменить echo на посмотри документацию
     public function __construct(){
@@ -158,6 +159,7 @@ class Image extends CI_Controller{
             }
         }
     }
+
     //TODO лайки можно вынести в отдельный класс
 
     //Лайкаем фоточки
@@ -213,7 +215,6 @@ class Image extends CI_Controller{
     }
 
     // Выборка всех статей в виде превью
-    // Деление по модулю
     public function getIntro($app = null, $page = null){
         if($this->input->get_post('sub') && $this->input->get_post('app')){
             $count = (int)$this->getCount();
@@ -234,9 +235,7 @@ class Image extends CI_Controller{
     }
 
     //TODO после получения формировать количество страниц.
-    // Посмотри в своём прошлом проекте
     //В общем берём количество записей и делим на количество записей на странице с остатком, потом округляем в большую сторону.
-    //Кажется это так работает
     //Получить количество записей в таблице
     private function getCount(){
         $sql = "SELECT COUNT(*) AS `count` FROM `images`";

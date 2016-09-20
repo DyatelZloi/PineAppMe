@@ -10,12 +10,12 @@
         </form>
             <a href="http://pineappme:81/index.php/user/home_page/<?php echo $row['id_user']?>">Профиль</a>
             <a href="http://pineappme:81/index.php/album/getAlbums/<?php echo $row['id_user']?>"> Альбомы </a>
-        <li><?php echo $row['id_user']?></li> <br>
-        <li><?php echo $row['name']?></li> <br>
-        <li><?php echo $row['email']?></li> <br>
-        <li><?php echo $row['about']?></li> <br>
-        <li><?php echo $row['sity']?></li> <br>
-        <li><?php echo $row['birthday']?></li> <br>
+        <li>Страница : <?php echo $row['id_user']?></li> <br>
+        <li>Имя : <?php echo $row['name']?></li> <br>
+        <li>Емайл : <?php echo $row['email']?></li> <br>
+        <li>Обо мне : <?php echo $row['about']?></li> <br>
+        <li>Город : <?php echo $row['sity']?></li> <br>
+        <li>День рожденья : <?php echo $row['birthday']?></li> <br>
         <li><?php echo $row['role']?></li> <br>
         <li><?php echo $row['img']?></li> <br>
     <?php endforeach; ?>
