@@ -16,7 +16,7 @@ class Message extends CI_Controller{
     //Если хочешь возвращать значение тебе неободимо сохранять запрос в отдельной переменной
     //Добавляем сообщение в базу данных
     public function addMessage($id_user = null, $id_companion = null, $message = null, $data = null, $read = null){
-        if ($this->input->get('id_user') && $this->input->get('id_companion') && $this->input->get('message') && $this->input->get('data')) {
+        if ($this->input->get('id_user') && $this->input->get('id_companion') && $this->input->get('message')) {
             $sql = "INSERT INTO `messages`(`id_user`, `id_companion`, `message`, `data`, `read`) VALUES ("
                    .(string)$this->db->escape($this->input->get('id_user')).","
                    .(string)$this->db->escape($this->input->get('id_companion')).","
@@ -24,9 +24,7 @@ class Message extends CI_Controller{
                    .$this->db->escape($this->input->get('data')).","
                    .$this->db->escape($this->input->get('read')).
             ")";
-            if(!$this->db->query($sql)){
-                return 'Error database';
-            }
+           $this->db->query($sql);
         }
     }
 
@@ -41,8 +39,16 @@ class Message extends CI_Controller{
         if( $this->session->userdata('id_user')){
             $sql = "SELECT * FROM messages WHERE id_user =".(string)$this->db->escape($this->session->userdata('id_user')).
                    " OR id_companion =".(string)$this->db->escape($this->session->userdata('id_user'));
-            if(!$this->db->query($sql)){
-                return 'Error database';
+            $object = $this->db->query($sql);
+            $message = array();
+            foreach($object ->result_array() as $notRow){
+                $message['id_message'] = $notRow['id_message'];
+                $message['id_user'] = $notRow['id_user'];
+                $message['id_companion'] = $notRow['id_companion'];
+                $message['message'] = $notRow['message'];
+                $message['data'] = $notRow['data'];
+                $message['read'] = $notRow['read'];
+                echo json_encode($message);
             }
         }
     }

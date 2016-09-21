@@ -5,73 +5,71 @@
         <li><?php echo $row['email']?></li> <br>
         <li><?php echo $row['about']?></li> <br>
         <li><?php echo $row['sity']?></li> <br>
-        <input type="button" id="" class="MyCompanion" onclick="openChatCompanion('<?php echo $row['id_user']?>')" value="Написать"/>
-        <!--
-            <?php if($messages != null):?>
-                <?php foreach($messages ->result_array() as $notRow):?>
-                    <?php echo $notRow['id_message'] ?><br>
-                    <?php echo $notRow['id_user'] ?><br>
-                    <?php echo $notRow['id_companion'] ?><br>
-                    <?php echo $notRow['message'] ?><br>
-                    <?php echo $notRow['data'] ?><br>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        -->
+        <input type="button" id="" class="MyCompanion" onclick="openChatCompanion('<?php echo $row['id_user']?>','<?php echo $row['id_user']?>' )" value="Написать"/>
         <?php
             echo "<div class='chat_wrapper' id='".$row['id_user']."'><!-- Тут по идее id юзера в id-->
-                <div class='m_box' id='m_box'></div>
-                    <div class='panel'>
-                        <input type='hidden' name='name' id='name".$row['id_user']."' value='".$this->session->userdata('id_user')."'/>
-                        <input type='hidden' name='companion' id='companion".$row['id_user']."' value='".$row['id_user']."'>
-                        <input type='text' name='message' id='message".$row['id_user']."' placeholder='Message' style='width:60%' />";
-
-                echo '<button onclick="addMessage('."'".$row['id_user']."'".')"> Отправить </button>
-                    </div>
-            </div>';
+                 <div class='m_box' id='"."1".$row['id_user']."'>";
+        if($messages != null){
+            foreach($messages ->result_array() as $notRow){
+                if ($notRow['id_user']== $row['id_user'] | $notRow['id_companion'] == $row['id_user']){
+                    if($notRow['id_user']== $row['id_user']){
+                        echo "
+                            <div>
+                                <span class = \"user_name\" style=\"color:black\">".$row['id_user']."</span>
+                                 :
+                                <span class = \"user_message\">".$notRow['message']."</span>
+                                <hidden class = \"user_companion\" value =\"php cod\">
+                            </div>
+                        ";
+                    } else {
+                        echo "
+                            <div>
+                                <span class = \"user_name\" style=\"color:black\"> ".$notRow['id_user']."</span>
+                                 :
+                                <span class = \"user_message\">".$notRow['message']."</span>
+                                <hidden class = \"user_companion\" value =\"php cod\">
+                            </div>
+                        ";
+                    }
+                }
+            }
+        }
+            echo "</div>
+                 <div class='panel'>
+            <input type='hidden' name='name' id='name".$row['id_user']."' value='".$this->session->userdata('id_user')."'/>
+                 <input type='hidden' name='companion' id='companion".$row['id_user']."' value='".$row['id_user']."'>
+                 <input type='text' name='message' id='message".$row['id_user']."' placeholder='Message' style='width:60%' />";
+            echo '<button onclick="sendMessage('."'".$row['id_user']."'".')"> Отправить </button>
+                 </div>
+                 </div>';
         ?>
     <?php endforeach; ?>
 </div>
 
 
 <input type="hidden" id="id_my" value="<?php echo $this->session->userdata('id_user') ?>">
+<input type="hidden" id="my_com" value="">
 <div id="ChatBody">
     <div class="message_box" id="message_box"></div>
 </div>
+
+<div id="ajax">
+
+</div>
+<button type="button" onclick="getAllMessages()"> Все сообщения </button>
 <!--
-    Готово:
-
-    Необходимо:
-    Установка нового ip пользователю при заходе на сайт, если он был изменён.
-    Теперь можно реализовывать выборку сообщений из базы, сейчас этим и займусь
-
-    1 Установить линукс или сделать себе на виртуальную машину;
-    2 Делаем выборку подписчиков и узнаём их ip; +
-    3 Скрываем поля, что кто-то подключился и отключился; +
-    4 при подключении показываем, что пользователь онлайн, сравниваем есть ли такой ip у нас, если есть - значит он онлайн;
-    5 при отключении показываем, что пользователь оффлайн, сравниваем есть ли такой ip онлайн, если есть - значит оффаем;
-    6 при клике на пользователя выбираем все сообщения его нам и наши ему, грузим их;
-    7 Если нам написали показываем это рядом с онлайном пользователя;
-    8 Необходимо подумать над запросами к бд, при отправке/получении сообщения и как мы будем определять прочитанные сообщения;
-    9 Сообщение, от кого, кому, дата, id сообщения, прочитано(если будем каждый раз ещё и при получении базу дёргать это может быть не очень хорошо)
-    10 При клике на пользователя открываем окно диалога с ним
-    11 При клике на другого открываем другое окно, а другие окна скрываем
-    12 При подключении создаём диалоговые окна для всех, загружаем в них прошлые сообщения, но скрываем их и показываем только при необходимости
-    13
+    Получение текущей даты
+    echo (date("d.m.Y h:I:s"));
+    отображается сообщение в виде
+    <div>
+        <span class = "user_name" style="color:black"> php cod</span>
+         :
+        <span class = "user_message"> php cod </span>
+        <hidden class = "user_companion" value ="php cod">
+    </div>
 -->
 
 <script type='text/javascript'>
-    //TODO проверка из какого дива мы пишем
-    //TODO проверка в какой див пишут нам
-    //TODO итоговый вывод в нужный див нужной информации
-    //TODO запись переписки в базу данных
-    //TODO извлечение переписки с конкретным пользователем из базы данных
-    //Отлично! Мы сделали это! Такими темпами чатик будет готов, когда-нибудь уж точно будет...
-
-    //Функция проверки наличия чата
-    function chetChat(){
-
-    };
-
     //Создаём чат
     //Нужно проверять не создан ли чат, т.к. предположительно удалять их мы не будем, а если его нет, то создаём.
     //Но возможно, что мы будем его удалять, тогда нам как раз
@@ -100,27 +98,19 @@
         xhttp.send();
     }
 
-    // Надо будет сделать проверку чтобы скрывать ненужные чаты или же открывать новый поверх старых, а если решим вернуться в старый
-    // Будем отображать его сверху
     // Открываем чат
-    function openChatCompanion(Companion){
+    function openChatCompanion(Companion,MyComp2){
         var Chat;
         var Comp = Companion;
         Chat = document.getElementById(Comp);
         Chat.classList.add('chat_block');
-    };
-
-    //Закрываем чат
-    //Мы можем его вообще удалить, но будет ли это правильно? Наверное его просто нужно скрывать от посторонних глаз.
-    //Да шучу я, удалять тоже можно.
-    function closeChat(){
-
+        document.getElementById('my_com').setAttribute('value','1'+MyComp2)
     };
 
     function sendMessage(MyComp){
-        var mymessage = $('#message').val();
-        var myname = $('#name').val();
-        var mycompanion = MyComp;
+        var mymessage = $('#message'+MyComp).val();
+        var myname = $('#name'+MyComp).val();
+        var id_companion = document.getElementById('companion'+MyComp).value;
 
         if(mymessage == ""){
             alert("Enter Some message Please!");
@@ -130,15 +120,28 @@
         var msg = {
             message: mymessage,
             name: myname,
-            companion : mycompanion,
+            companion : id_companion,
             color : 'black'
         };
+        addMessage(MyComp);
         websocket.send(JSON.stringify(msg));
     }
+        //Получаем все сообщения и постараемся распихать их по нужным чатам
+        function getAllMessages(){
+            xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (xhttp.status == 200){
+                    document.getElementById("ajax").innerHTML = xhttp.responseText;
+                }
+            };
+            xhttp.open("GET", "http://pineappme:81/index.php/message/getAllMessage");
+            xhttp.send();
+        }
 
     //Клиет на JavaScript добавить открытие окна чата, если нам пришло сообщение или просто небольшое окошко при клике на котором
     //Будем выводить сам чат
     $(document).ready(function(){
+
         var wsUri = "ws://localhost:9000/demo/server.php";
         websocket = new WebSocket(wsUri);
 
@@ -163,7 +166,7 @@
                 color : 'black'
             };
             websocket.send(JSON.stringify(msg));
-            //addMessage();
+            addMessage();
         });
 
         websocket.onmessage = function(ev) {
@@ -174,10 +177,15 @@
             var uname = msg.name;
             var ucolor = msg.color;
             var ucompanion = msg.companion;
-            if (ucompanion == myname | uname == myname){
-                if(type == 'usermsg') {
-                    $('#message_box').append("<div><span class=\"user_name\" style=\"color:#"+ucolor+"\">"+uname+"</span> : <span class=\"user_message\">"+umsg+"</span> <h1>"+ucompanion+"</h1></div>");
+            var tutmessage =  document.getElementById('my_com').value;
+            if(type == 'usermsg') {
+                if ( uname == myname){
+                    $("#"+tutmessage ).append("<div><span class=\"user_name\" style=\"color:#" + ucolor + "\">" + uname + "</span> : <span class=\"user_message\">" + umsg + "</span><hidden class = \"user_companion\" value =" + ucompanion + "></div>");
                 }
+                if( ucompanion == myname){
+                    $("#"+"1"+uname ).append("<div><span class=\"user_name\" style=\"color:#" + ucolor + "\">" + uname + "</span> : <span class=\"user_message\">" + umsg + "</span><hidden class = \"user_companion\" value =" + ucompanion + "></div>");
+                }
+                //$("#"+tutmessage ).append("<div><span class=\"user_name\" style=\"color:#" + ucolor + "\">" + uname + "</span> : <span class=\"user_message\">" + umsg + "</span><hidden class = \"user_companion\" value =" + ucompanion + "></div>");
             }
             if(type == 'system') {
                 $('#message_box').append("<div class=\"system_msg\">"+umsg+"</div>");
@@ -225,8 +233,3 @@
         display: block;
     }
 </style>
-
-<!--
-Важная информация - обычно шеф приходит к 15:00
-Сегодня работаем и дома, примерно с 21 00 до 23 00
--->

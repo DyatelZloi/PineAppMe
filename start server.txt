@@ -1,0 +1,1 @@
+php -q c:\openserver\domains\pineappme\server.php
