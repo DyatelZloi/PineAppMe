@@ -57,6 +57,7 @@
 
 </div>
 <button type="button" onclick="getAllMessages()"> Все сообщения </button>
+
 <!--
     Получение текущей даты
     echo (date("d.m.Y h:I:s"));
@@ -70,6 +71,12 @@
 -->
 
 <script type='text/javascript'>
+    //Получаем время
+    function time(){
+        var data = new Date();
+        var MyTime = (data.getDate()+'.'+data.getMonth()+'.'+data.getFullYear()+' '+data.getHours()+':'+data.getMinutes()+':'+data.getSeconds());
+    };
+
     //Создаём чат
     //Нужно проверять не создан ли чат, т.к. предположительно удалять их мы не будем, а если его нет, то создаём.
     //Но возможно, что мы будем его удалять, тогда нам как раз
@@ -87,8 +94,7 @@
         var id_user = document.getElementById('name'+MyComp).value;
         var id_companion = document.getElementById('companion'+MyComp).value;
         var message = document.getElementById('message'+MyComp).value;
-        var now = new Date(); // С датой надо будет разобраться возможно реализация на php
-        var data = now.getFullYear(); // С датой надо будет разобраться возможно реализация на php
+        var data = time();
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (xhttp.readyState == 4 && xhttp.status == 200)
@@ -123,8 +129,8 @@
             companion : id_companion,
             color : 'black'
         };
-        addMessage(MyComp);
         websocket.send(JSON.stringify(msg));
+        addMessage(MyComp);
     }
         //Получаем все сообщения и постараемся распихать их по нужным чатам
         function getAllMessages(){

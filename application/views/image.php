@@ -25,6 +25,7 @@
     <div id="LikeAndDislike">
         <input id="likeAjax" type="button" value="Лайк AJAX" onclick="likeImage()">
     </div>
+    <a href="http://pineappme:81/index.php/user/setImageFromImages?id_image=<?php echo $row['id_image']?>"> Установить на аватар </a>
 <?php endforeach; ?>
 <ul id="delete">
         <li> Лайкнувшие пользователи : </li>

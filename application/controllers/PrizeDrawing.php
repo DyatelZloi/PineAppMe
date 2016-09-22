@@ -2,8 +2,7 @@
 class PrizeDrawing extends CI_Controller{
 
     //TODO проверки, кучу проверок.
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
@@ -13,3 +12,4 @@ class PrizeDrawing extends CI_Controller{
         echo 'В разработке!';
     }
 }
+

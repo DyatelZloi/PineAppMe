@@ -1,6 +1,7 @@
 <?php
 class Image extends CI_Controller{
 
+    //TODO заменить post на get_post, пример : $this->input->get_post('id_image', TRUE)
     //TODO проверки, кучу проверок.
     //TODO дата добавления картинки
     //TODO заменить echo на посмотри документацию
@@ -180,8 +181,8 @@ class Image extends CI_Controller{
             $id_user = $this->input->get('id_user');
             $id_image = $this->input->get('id_image');
             $sql = "INSERT INTO `like` (id_user, id_image) VALUES ("
-                .(string)$this->db->escape($id_user).","
-                .$this->db->escape($id_image).")";
+                   .(string)$this->db->escape($id_user).","
+                   .$this->db->escape($id_image).")";
             $query = $this->db->query($sql);
             $sql = "UPDATE images SET likes = likes + 1 WHERE id_image =" .$this->db->escape($id_image).";";
             $query = $this->db->query($sql);
@@ -194,8 +195,8 @@ class Image extends CI_Controller{
             $id_user = $this->session->userdata('id_user');
             $id_image = $this->input->post('id_image');
             $sql = "DELETE FROM `like` WHERE id_user = ("
-                .(string)$this->db->escape($id_user)." AND id_image ="
-                .(int)$this->db->escape($id_image).")";
+                   .(string)$this->db->escape($id_user)." AND id_image ="
+                   .(int)$this->db->escape($id_image).")";
             $query = $this->db->query($sql);
         } else echo 'Не ввели данные';
     }
@@ -206,8 +207,8 @@ class Image extends CI_Controller{
             $id_user = $this->input->get('id_user');
             $id_image = $this->input->get('id_image');
             $sql = "DELETE FROM `like` WHERE id_user = "
-                .(string)$this->db->escape($id_user)." AND id_image ="
-                .$this->db->escape($id_image);
+                   .(string)$this->db->escape($id_user)." AND id_image ="
+                   .$this->db->escape($id_image);
             $query = $this->db->query($sql);
             $sql = "UPDATE images SET likes = likes - 1 WHERE id_image =" .$this->db->escape($id_image).";";
             $query = $this->db->query($sql);
@@ -265,4 +266,5 @@ class Image extends CI_Controller{
         $this->load->view('index',$images_data);
         $this->load->view('footer');
     }
+
 }

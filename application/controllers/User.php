@@ -1,11 +1,12 @@
 <?php
 class User extends CI_Controller{
 
+    //TODO заменить post на get_post, пример : $this->input->get_post('id_image', TRUE)
     //TODO проверки, кучу проверок.
     public function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
-        $this->load->library('form_validation');
+        $this->load->library(array('form_validation'));
     }
 
     //TODO реализовать
@@ -88,6 +89,8 @@ class User extends CI_Controller{
             $this->load->view('header', array('title' => 'Регистрация'));
             $this->load->view('registration_success');
             $this->load->view('footer');
+
+
         }
     }
 
@@ -102,6 +105,7 @@ class User extends CI_Controller{
 
     }
 
+    //Выход с сайте, без редиректа
     public function logoutFromSite(){
         $this->session->unset_userdata('username');
         $this->session->unset_userdata('email');
@@ -126,23 +130,10 @@ class User extends CI_Controller{
     }
 
     //Выполняет запрос к базе данных, возвращает true или false, если запрос на добовление удачен/нет
-    private function new_user(
-        $id_user,
-        $name,
-        $email,
-        $password
-    ){
-        $sql = "INSERT INTO users (
-                  id_user,
-                  name,
-                  email,
-                  password
-                ) VALUES(
-                  ".$this->db->escape($id_user).",
-                  ".$this->db->escape($name).",
-                  ".$this->db->escape($email).",
-                  ".$this->db->escape($password)."
-                )";
+    private function new_user($id_user, $name, $email, $password){
+        $sql = "INSERT INTO users (id_user, name, email, password) VALUES(
+               ".$this->db->escape($id_user).",".$this->db->escape($name).",
+               ".$this->db->escape($email).",".$this->db->escape($password).")";
         $query = $this->db->query($sql);
         return $query;
     }
@@ -174,15 +165,15 @@ class User extends CI_Controller{
             $img = $this->input->post('img');
             $password = $this->input->post('password');
             $sql = "UPDATE `users` SET `id_user`=" . (string)$this->db->escape($id_user) .
-                ",`name`=" . (string)$this->db->escape($name) .
-                ",`email`=" . (string)$this->db->escape($email) .
-                ",`about`=" . (string)$this->db->escape($about) .
-                ",`sity`=" . (string)$this->db->escape($sity) .
-                ",`birthday`=" . $this->db->escape($birthday) .
-                ",`role`=" . (string)$this->db->escape($role) .
-                ",`img`=" . (string)$this->db->escape($img) .
-                ",`password`=" . (string)$this->db->escape($password) .
-                " WHERE id_user =" . (string)$this->db->escape($id_user);
+                   ",`name`=" . (string)$this->db->escape($name) .
+                   ",`email`=" . (string)$this->db->escape($email) .
+                   ",`about`=" . (string)$this->db->escape($about) .
+                   ",`sity`=" . (string)$this->db->escape($sity) .
+                   ",`birthday`=" . $this->db->escape($birthday) .
+                   ",`role`=" . (string)$this->db->escape($role) .
+                   ",`img`=" . (string)$this->db->escape($img) .
+                   ",`password`=" . (string)$this->db->escape($password) .
+                   " WHERE id_user =" . (string)$this->db->escape($id_user);
             if ($this->db->query($sql)) {
                 echo 'Информация изменена';
             } else echo 'Ошибка базы данных';
@@ -228,4 +219,79 @@ class User extends CI_Controller{
         $this->load->view('footer');
     }
 
+    //Загружаем картинку для профиля
+    public function loadImage(){
+
+    }
+
+    //TODO проверка айди владельца
+    //Устанавливаем картинку для профиля из загруженных
+    public function setImageFromImages(){
+        if($this->session->userdata('id_user') && $this->input->get_post('id_image', TRUE) ){
+            $sql = "UPDATE `users` SET `img`=".$this->db->escape($this->input->get_post('id_image', TRUE))
+                   ." WHERE id_user =".(string)$this->db->escape($this->session->userdata('id_user'));
+            if(!$this->db->query($sql)){
+                echo 'Ошибка базы данных';
+            }
+        }
+    }
+
+    //загружаем бэкграунд для профиля
+    public function loadBackground(){
+
+    }
+
+    //TODO проверка айди владельца
+    //Установка бэкграунда из загруженных картинко для профиля
+    public function setBackgroundFromImages(){
+        if($this->session->userdata('id_user') && $this->input->get_post('id_image', TRUE)){
+            $sql = "UPDATE `users` SET `background`=".$this->db->escape($this->input->get_post('id_image', TRUE))
+                   ." WHERE id_user =".(string)$this->db->escape($this->session->userdata('id_user'));
+            if(!$this->db->query($sql)){
+                echo 'Ошибка базы данных';
+            }
+        }
+    }
+
+    //Также необходимо, чтобы были какие-то стандартыне значения для новых пользователей и стандартные картинки фона/аватарки
+    //Можно сделать две формы, с одной кнопкой-обработчиком. При нажатии которой будем проверять если что-то в поле с картинкой
+    //есть, значит будет второй запрос к серверу, для загрузки картинки
+    //Или же можно пинать сервер с помощью аджакса, пускай загружает
+
+    //Установка ip пользователя
+    public function getIp(){
+        if($this->session->userdata('id_user')){
+            if (!empty($_SERVER['HTTP_CLIENT_IP'])){
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+            }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            } else {
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
+            $sql = "UPDATE `users` SET `ip_user`=".$this->db->escape($ip)." WHERE id_user =".
+                   (string)$this->db->escape($this->session->userdata('id_user'));
+            $this->db->query($sql);
+        }
+    }
+
+    //TODO почему-то сообщения не приходят на почту, хотя явно отрабатывает без ошибок
+    //Отправка сообщения
+    public function sendEmailMessage(){
+        $this->load->library('email');
+        $config['protocol'] = 'sendmail';
+        $config['mailpath'] = '/usr/sbin/sendmail';
+        $config['charset'] = 'iso-8859-1';
+        $config['wordwrap'] = TRUE;
+        $this->email->initialize($config);
+
+        $this->email->from('omgwtf@mail.ru', 'Nikifor');
+        $this->email->to('nikiforma@mail.ru');
+
+        $this->email->subject('Тестовое сообщение');
+        $this->email->message('Проверка класса email.');
+
+        if($this->email->send()){
+            echo 'Some error';
+        }
+    }
 }

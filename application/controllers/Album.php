@@ -1,6 +1,7 @@
 <?php
 class Album extends CI_Controller{
 
+    //TODO заменить post на get_post, пример : $this->input->get_post('id_image', TRUE)
     //TODO проверки, кучу проверок.
     public function __construct(){
         parent::__construct();
@@ -56,9 +57,9 @@ class Album extends CI_Controller{
                 $name = $this->input->post('name');
                 $about = $this->input->post('about');
                 $sql = "INSERT INTO `albums`(`name`, `about`, `id_user`) VALUES (" .
-                    (string)$this->db->escape($name).",".
-                    (string)$this->db->escape($about).",".
-                    (string)$this->db->escape($id_user).")";
+                       (string)$this->db->escape($name).",".
+                       (string)$this->db->escape($about).",".
+                       (string)$this->db->escape($id_user).")";
                 $this->db->query($sql);
                 //Пробуем загрузку изображения
                 //Настройки
@@ -97,7 +98,8 @@ class Album extends CI_Controller{
 
     //Получаем все альбомы этого юзера по ИД
     private function getAllAlbumsByUser($id_user){
-        $sql = "SELECT * FROM `users` LEFT OUTER JOIN albums USING (id_user) WHERE id_user =".(string)$this->db->escape($id_user);
+        $sql = "SELECT * FROM `users` LEFT OUTER JOIN albums USING (id_user) WHERE id_user ="
+               .(string)$this->db->escape($id_user);
         $query = $this->db->query($sql);
         return $query;
     }
@@ -119,8 +121,8 @@ class Album extends CI_Controller{
             $id_user = $this->session->userdata('id_user');
             $id = $this->input->post('id_album');
             $sql = "DELETE FROM `albums` WHERE id_album = " .
-                $this->db->escape($id)." AND id_user = ".
-                (string)$this->db->escape($id_user);
+                   $this->db->escape($id)." AND id_user = ".
+                   (string)$this->db->escape($id_user);
             $query = $this->db->query($sql);
             redirect('http://pineappme:81/index.php/user/home_page/'.$this->session->userdata('id_user'), 'refresh');
         }
@@ -163,9 +165,9 @@ class Album extends CI_Controller{
             $name = $this->input->post('name');
             $about = $this->input->post('about');
             $sql = "UPDATE `albums` SET `name`=".
-                $this->db->escape($name).
-                ",`about`=".$this->db->escape($about).
-                " WHERE id_album=".$this->db->escape($id_album);
+                   $this->db->escape($name).
+                   ",`about`=".$this->db->escape($about).
+                   " WHERE id_album=".$this->db->escape($id_album);
             $query = $this->db->query($sql);
         }
     }
@@ -182,6 +184,23 @@ class Album extends CI_Controller{
         }
     }
 
-    //Эй, уже скоро клиенты примчатся, где вы шеф? Я же так и разрыв сердца получу. Всё будет хорошо.
+    //TODO проверка из этого ли альбома картинка
+    //Устанавливаем обложку для альбома
+    public function setCoverFromImage(){
+        if($this->session->userdata('id_user') && $this->input->get_post('id_album', TRUE) && $this->input->get_post('id_image', TRUE)){
+            $sql = "UPDATE `albums` SET `cover`=".$this->db->escape($this->input->get_post('id_image', TRUE))
+                   ." WHERE id_album =".$this->db->escape($this->session->userdata('id_album'));
+            if(!$this->db->query($sql)){
+                echo 'Ошибка базы данных';
+            }
+        }
+    }
+
+    //Загружаем обложку для альбома
+    public function loadCover(){
+
+    }
+
+    //Сзодили бы вы похавать чтоли
 
 }

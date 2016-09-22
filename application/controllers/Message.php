@@ -1,9 +1,9 @@
 <?php
 class Message extends CI_Controller{
 
+    //TODO с чатом необходимы дополнительные проверки, довольно забавно, что он работает, после моего программирования
     //TODO проверки, кучу проверок.
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
@@ -17,11 +17,10 @@ class Message extends CI_Controller{
     //Добавляем сообщение в базу данных
     public function addMessage($id_user = null, $id_companion = null, $message = null, $data = null, $read = null){
         if ($this->input->get('id_user') && $this->input->get('id_companion') && $this->input->get('message')) {
-            $sql = "INSERT INTO `messages`(`id_user`, `id_companion`, `message`, `data`, `read`) VALUES ("
+            $sql = "INSERT INTO `messages`(`id_user`, `id_companion`, `message`, `read`) VALUES ("
                    .(string)$this->db->escape($this->input->get('id_user')).","
                    .(string)$this->db->escape($this->input->get('id_companion')).","
                    .$this->db->escape($this->input->get('message')).","
-                   .$this->db->escape($this->input->get('data')).","
                    .$this->db->escape($this->input->get('read')).
             ")";
            $this->db->query($sql);
@@ -52,6 +51,5 @@ class Message extends CI_Controller{
             }
         }
     }
-
 
 }
