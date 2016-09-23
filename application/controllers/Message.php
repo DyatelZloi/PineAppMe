@@ -21,8 +21,7 @@ class Message extends CI_Controller{
                    .(string)$this->db->escape($this->input->get('id_user')).","
                    .(string)$this->db->escape($this->input->get('id_companion')).","
                    .$this->db->escape($this->input->get('message')).","
-                   .$this->db->escape($this->input->get('read')).
-            ")";
+                   .$this->db->escape($this->input->get('read')).")";
            $this->db->query($sql);
         }
     }

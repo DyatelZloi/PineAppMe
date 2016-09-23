@@ -43,7 +43,7 @@ class Subscription extends CI_Controller{
     public function getAllSubcribers(){
         if ($this->input->post('id_user')){
             $id_user = $this->input->post('id_user');
-            $sql = "SELECT * FROM subscribers JOIN users WHERE subscribers.id_user =".(string)$this->db->escape($id_user).
+            $sql = "SELECT * FROM subscribers JOIN users LEFT OUTER JOIN images USING (id_image) WHERE subscribers.id_user =".(string)$this->db->escape($id_user).
                    " AND users.id_user = subscribers.id_subscriber";
             $query = $this->db->query($sql);
             $sql = "SELECT * FROM messages WHERE id_user =".(string)$this->db->escape($this->session->userdata('id_user')).
@@ -75,19 +75,29 @@ class Subscription extends CI_Controller{
     public function getAllNews(){
         if($this->session->userdata('id_user')){
             $id_user = $this->session->userdata('id_user');
-            $sql = "SELECT * FROM `subscribers`  NATURAL JOIN `images` NATURAL JOIN `users` WHERE subscribers.id_subscriber = "
+            $sql = "SELECT * FROM `subscribers` JOIN `users` JOIN `images`  WHERE subscribers.id_subscriber ="
                    .(string)$this->db->escape($id_user).
-                   "AND users.id_user = subscribers.id_user AND images.image_data > subscribers.data ORDER BY images.id_image DESC";
-            //теперь нужно как-то вытаскивать лайки и его подписки
-            // Это будет самый сложный запрос в моей жизни D
-            // Можно конечно разбить на несколько запросов
+                   " AND users.id_user = subscribers.id_user AND images.image_data > subscribers.data ORDER BY images.id_image DESC;";
             //Можно создать событие и каждое добовление, лайк, репост, подписку отображать там, в таком случае будет лёгкий запрос
-            //Ещё подумаю над этим и позже вернусь, возможно реализую дома и потом свраним оба вариантва
             $query = $this->db->query($sql);
+            //Запрос для получения лайков
+            //Не доверяй этому запросу, он коварен
+            //Также получаем информацию о картинке, будем верить, что нужной картинке
+            $sql2 = "SELECT * FROM `subscribers` LEFT OUTER JOIN images USING (id_user) JOIN `like` JOIN `users` WHERE subscribers.id_subscriber ="
+                    .(string)$this->db->escape($id_user).
+                    "AND users.id_user = subscribers.id_user AND like.like_data > subscribers.data ORDER BY like.id_like DESC";
+            //Запрос для получения репостов, но т.к. самих репостов пока нет, нету и запроса. Он тоже будет тяжёлым D.
+
+            $query2 = $this->db->query($sql2);
+            //$sql3 = "";
             $this->load->view('header', array('title' => 'Подписки'));
-            $this->load->view('news', array('images_data' => $query));
+            $this->load->view('news', array('images_data' => $query, 'like_data' => $query2));
             $this->load->view('footer');
         } else echo 'Залогиньтесь';
     }
 
+    //Довольно сложно можно для начала разбить на 3 подвида, а затем уже как-то объеденять их.
+    //Да и юзерам будет немного удобней смотреть что-то отдельное т.к. не будет каши в голове.
+    //Правда заказчики могут не одобрить
+    //Также рассмотрим вариант array_merge() в файле написана подсказка
 }

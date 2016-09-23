@@ -149,8 +149,7 @@ class Image extends CI_Controller{
                 $config['new_image'] = './img/mini/'.$file_name['file_name'];
                 $config['create_thumb'] = FALSE;
                 $config['maintain_ratio'] = TRUE;
-                $config['width']	= 75;
-                $config['height']	= 75;
+                $config['height']	= 240;
                 $this->load->library('image_lib', $config);
                 $this->image_lib->resize();
                 $this->load->view('header', array('title' => 'Картинка загружена'));
@@ -265,6 +264,104 @@ class Image extends CI_Controller{
         $this->load->view('header', array('title' => 'Все картинки'));
         $this->load->view('index',$images_data);
         $this->load->view('footer');
+    }
+
+    //Загружаем картинку для профиля
+    public function loadImage(){
+        if($this->session->userdata('id_user') == null){
+            echo 'Залогиньтесь';
+        } else {
+            $id_user = $this->session->userdata('id_user');
+            $id_album = $this->input->post('id_album');
+            $config['upload_path'] = './uploads/';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['max_size']	= '2048';
+            $config['max_width']  = '2000';
+            $config['max_height']  = '2000';
+            $this->load->library('upload', $config);
+            if ( !$this->upload->do_upload() ) {
+                $error = array('error' => $this->upload->display_errors());
+                $this->load->view('upload_form', $error);
+            }
+            else {
+                $data = array('upload_data' => $this->upload->data());
+                $file_name = array();
+                //TODO можно заменить на конструкцию проще
+                foreach($data as $item){
+                    $file_name['file_name'] = $item['file_name'];
+                }
+                $sql = "INSERT INTO `images` (path, id_user, id_album) VALUES("
+                       .$this->db->escape($file_name['file_name']).","
+                       .(string)$this->db->escape($id_user).","
+                       .$this->db->escape($id_album).")";
+                $sql2 = "UPDATE `users` SET `img`=".$this->db->escape($this->input->get_post('id_image', TRUE))
+                        ." WHERE id_user =".(string)$this->db->escape($this->session->userdata('id_user'));
+                if (!$this->db->query($sql) | !$this->db->query($sql2)){
+                    echo 'Error database';
+                }
+                $config['image_library'] = 'gd2';
+                $config['source_image']	= './uploads/'.$file_name['file_name'];
+                $config['new_image'] = './img/mini/'.$file_name['file_name'];
+                $config['create_thumb'] = FALSE;
+                $config['maintain_ratio'] = TRUE;
+                $config['height']	= 240;
+                $this->load->library('image_lib', $config);
+                $this->image_lib->resize();
+                $this->load->view('header', array('title' => 'Картинка загружена'));
+                $this->load->view('upload_success', $data);
+                $this->load->view('footer');
+
+            }
+        }
+    }
+
+    //загружаем бэкграунд для профиля
+    public function loadBackground(){
+        if($this->session->userdata('id_user') == null){
+            echo 'Залогиньтесь';
+        } else {
+            $id_user = $this->session->userdata('id_user');
+            $id_album = $this->input->post('id_album');
+            $config['upload_path'] = './uploads/';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['max_size']	= '2048';
+            $config['max_width']  = '2000';
+            $config['max_height']  = '2000';
+            $this->load->library('upload', $config);
+            if ( !$this->upload->do_upload() ) {
+                $error = array('error' => $this->upload->display_errors());
+                $this->load->view('upload_form', $error);
+            }
+            else {
+                $data = array('upload_data' => $this->upload->data());
+                $file_name = array();
+                //TODO можно заменить на конструкцию проще
+                foreach($data as $item){
+                    $file_name['file_name'] = $item['file_name'];
+                }
+                $sql = "INSERT INTO `images` (path, id_user, id_album) VALUES("
+                       .$this->db->escape($file_name['file_name']).","
+                       .(string)$this->db->escape($id_user).","
+                       .$this->db->escape($id_album).")";
+                $sql2 = "UPDATE `users` SET `background`=".$this->db->escape($this->input->get_post('id_image', TRUE))
+                        ." WHERE id_user =".(string)$this->db->escape($this->session->userdata('id_user'));
+                if (!$this->db->query($sql) | !$this->db->query($sql2)){
+                    echo 'Error database';
+                }
+                $config['image_library'] = 'gd2';
+                $config['source_image']	= './uploads/'.$file_name['file_name'];
+                $config['new_image'] = './img/mini/'.$file_name['file_name'];
+                $config['create_thumb'] = FALSE;
+                $config['maintain_ratio'] = TRUE;
+                $config['height']	= 240;
+                $this->load->library('image_lib', $config);
+                $this->image_lib->resize();
+                $this->load->view('header', array('title' => 'Картинка загружена'));
+                $this->load->view('upload_success', $data);
+                $this->load->view('footer');
+
+            }
+        }
     }
 
 }

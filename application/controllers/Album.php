@@ -34,7 +34,7 @@ class Album extends CI_Controller{
         } else {
             $id_user = $this->session->userdata('id_user');
             $query = $this->getAllAlbumsByUser($id_user);
-                $this->load->view('header', array('title' => 'Альбомы'));
+            $this->load->view('header', array('title' => 'Альбомы'));
             $this->load->view('albums', array('error' => ' ', 'albums' => $query));
             $this->load->view('footer');
         }
@@ -54,8 +54,8 @@ class Album extends CI_Controller{
             }
             else {
                 $id_user = $this->session->userdata('id_user');
-                $name = $this->input->post('name');
-                $about = $this->input->post('about');
+                $name = $this->input->get_post('name', TRUE);
+                $about = $this->input->get_post('about', TRUE);
                 $sql = "INSERT INTO `albums`(`name`, `about`, `id_user`) VALUES (" .
                        (string)$this->db->escape($name).",".
                        (string)$this->db->escape($about).",".
@@ -79,7 +79,7 @@ class Album extends CI_Controller{
                         $file_name['file_name'] = $item['file_name'];
                     }
                     $sql = "UPDATE `albums` SET `сover`=".$this->db->escape($file_name['file_name'])." WHERE name ="
-                        .(string)$this->db->escape($name);
+                           .(string)$this->db->escape($name);
                     $query = $this->db->query($sql);
                     $config['image_library'] = 'gd2';
                     $config['source_image']	= './uploads/'.$file_name['file_name'];
@@ -107,49 +107,57 @@ class Album extends CI_Controller{
     //TODO удаление картинок тоже
     //Удаление альбома по названию
     public function delAlbumByName(){
-        if($this->input->post('name')){
-            $name = $this->input->post('name');
+        if($this->input->get_post('name', TRUE)){
+            $name = $this->input->get_post('name', TRUE);
             $sql = "DELETE FROM `albums` WHERE name = ".(string)$this->db->escape($name);
-            $query = $this->db->query($sql);
+            if(!$this->db->query($sql)){
+                echo 'Error database';
+            }
             redirect('http://pineappme:81/index.php/user/home_page/'.$this->session->userdata('id_user'), 'refresh');
         }
     }
 
     //Удаление альбома по ИД
     public function delAlbumById(){
-        if($this->input->post('id_album') && $this->session->userdata('id_user') != null){
+        if($this->input->get_post('id_album', TRUE) && $this->session->userdata('id_user') != null){
             $id_user = $this->session->userdata('id_user');
-            $id = $this->input->post('id_album');
+            $id = $this->input->get_post('id_album', TRUE);
             $sql = "DELETE FROM `albums` WHERE id_album = " .
                    $this->db->escape($id)." AND id_user = ".
                    (string)$this->db->escape($id_user);
-            $query = $this->db->query($sql);
+            if(!$this->db->query($sql)){
+                echo 'Error database';
+            }
             redirect('http://pineappme:81/index.php/user/home_page/'.$this->session->userdata('id_user'), 'refresh');
         }
     }
 
     //Получаем альбом по названию
     public function getAlbumByName(){
-        if($this->input->post('name')){
-            $name = $this->input->post('name');
+        if($this->input->get_post('name', TRUE)){
+            $name = $this->input->get_post('name', TRUE);
             $sql = "SELECT * FROM `albums` WHERE name = ".(string)$this->db->escape($name);
-            $query = $this->db->query($sql);
+            if(!$this->db->query($sql)){
+                echo 'Error database';
+            }
         }
     }
 
     //Получаем альбом по ИД
     public function getAlbumById(){
-        if($this->input->post('id')){
-            $id = $this->input->post('id');
+        if($this->input->get_post('id', TRUE)){
+            $id = $this->input->get_post('id', TRUE);
             $sql = "SELECT * FROM `albums` WHERE id_album = ".$this->db->escape($id);
-            $query = $this->db->query($sql);
+            if(!$this->db->query($sql)){
+                echo 'Error database';
+            }
         }
     }
 
     //Делаем sql запрос к бд, получаем инфу об альбоме, а затем уже вводим данные
     public function editAlbum(){
-        if ($this->input->post('id_album')){
-            $id_album = $this->input->post('id_album');
+        if ($this->input->get_post('id_album', TRUE)){
+            $id_album = $this->input->get_post('id_album', TRUE);
             $sql = "SELECT * FROM `albums` WHERE id_album = ".$this->db->escape($id_album);
             $album_data = array('album_data' => $this->db->query($sql));
             $this->load->view('header', array('title' => 'Редактировать альбом'));
@@ -160,15 +168,17 @@ class Album extends CI_Controller{
 
     //Редактирование альбома
     public function do_edit_Album(){
-        if($this->input->post('id_album') ){
-            $id_album = $this->input->post('id_album');
-            $name = $this->input->post('name');
-            $about = $this->input->post('about');
+        if($this->input->get_post('id_album', TRUE) | $this->session->userdata('id_user')){
+            $id_album = $this->input->get_post('id_album', TRUE);
+            $name = $this->input->get_post('name', TRUE);
+            $about = $this->input->get_post('about', TRUE);
             $sql = "UPDATE `albums` SET `name`=".
                    $this->db->escape($name).
                    ",`about`=".$this->db->escape($about).
                    " WHERE id_album=".$this->db->escape($id_album);
-            $query = $this->db->query($sql);
+            if($this->db->query($sql)){
+                redirect('http://pineappme:81/index.php/album/getAlbums/'.$this->session->userdata('id_user'), 'refresh');
+            } else echo 'Error database';
         }
     }
 
@@ -200,7 +210,5 @@ class Album extends CI_Controller{
     public function loadCover(){
 
     }
-
-    //Сзодили бы вы похавать чтоли
 
 }

@@ -1,5 +1,5 @@
 <?php
-class PrizeDrawing extends CI_Controller{
+class Repost extends CI_Controller{
 
     //TODO заменить post на get_post, пример : $this->input->get_post('id_image', TRUE)
     //TODO проверки, кучу проверок.
@@ -18,8 +18,7 @@ class PrizeDrawing extends CI_Controller{
         if($this->input->get_post('id_image', TRUE) && $this->session->userdata('id_user')){
             $sql = "INSERT INTO `repost`(`id_user`, `id_content`) VALUES ("
                    .(string)$this->db->escape($this->session->userdata('id_user')).","
-                   .$this->db->escape($this->input->get_post('id_image', TRUE)).
-                   ")";
+                   .$this->db->escape($this->input->get_post('id_image', TRUE)).")";
             if($this->db->query($sql)){
                 echo 'Error database';
             }
@@ -36,6 +35,10 @@ class PrizeDrawing extends CI_Controller{
             }
         }
     }
+
+    //Также это может быть вставка в бд images похожей записи, но с отличием в том, что будет дополнительное поле, в котором
+    //будет указанно, что isrepost == true. Таким образом было бы легче показывать новости, что же делать с подписками пока не знаю
+
 
 }
 

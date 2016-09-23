@@ -5,6 +5,7 @@
         <li><?php echo $row['email']?></li> <br>
         <li><?php echo $row['about']?></li> <br>
         <li><?php echo $row['sity']?></li> <br>
+        <li><?php echo $row['path']?></li> <br>
         <input type="button" id="" class="MyCompanion" onclick="openChatCompanion('<?php echo $row['id_user']?>','<?php echo $row['id_user']?>' )" value="Написать"/>
         <?php
             echo "<div class='chat_wrapper' id='".$row['id_user']."'><!-- Тут по идее id юзера в id-->

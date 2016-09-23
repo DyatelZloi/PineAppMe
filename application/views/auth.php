@@ -16,7 +16,7 @@ foreach($ses as $data){
 <?php echo validation_errors(); ?>
 <section>
     <script src="//ulogin.ru/js/ulogin.js"></script>
-    <div id="uLogin" data-ulogin="display=small;theme=classic;fields=first_name,email;providers=facebook,vkontakte,twitter,googleplus;redirect_uri=http%3A%2F%2Fpineappme%3A81%2Findex.php;mobilebuttons=0;"></div>
+    <div id="uLogin" data-ulogin="display=small;theme=classic;fields=first_name,email;providers=facebook,vkontakte,twitter,googleplus;redirect_uri=http%3A%2F%2Fpineappme%3A81%2Findex.php%2Fuser%2FloginFromULogin;mobilebuttons=0;"></div>
     <?php echo form_open('user/login/') ?>
         <label>
             E-mail: <input type="text" name="email"><br>

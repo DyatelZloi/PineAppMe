@@ -5,7 +5,7 @@ class User extends CI_Controller{
     //TODO проверки, кучу проверок.
     public function __construct(){
         parent::__construct();
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(array('form', 'url', 'string'));
         $this->load->library(array('form_validation'));
     }
 
@@ -37,7 +37,36 @@ class User extends CI_Controller{
                 );
                 $this->session->set_userdata($newdata);
             }
+            redirect('http://pineappme:81/index.php/', 'refresh');
         }
+    }
+
+    public function loginFromULogin(){
+        if ($this->input->post('token')) {
+            $s = file_get_contents('http://ulogin.ru/token.php?token=' . $_POST['token'] . '&host=' . $_SERVER['HTTP_HOST']);
+            $user = json_decode($s, true);
+            $id_user = random_string('alpha', 16);
+            $name = $user['first_name'];
+            $email = $user['email'];
+            $newdata = array();
+            $sql = "SELECT * FROM `users` WHERE `email` = ".(string)$this->db->escape($email);
+            if (!$this->db->query($sql)) {
+                $sql = "INSERT INTO `users` (`id_user`, `name`, `email`) VALUES(".$this->db->escape($id_user).",
+                       ".$this->db->escape($name).",".$this->db->escape($email).")";
+                $this->db->query($sql);
+            }
+            $sql = "SELECT * FROM users WHERE email = " . $this->db->escape($email);
+            $object = $this->db->query($sql);
+            foreach ($object->result_array() as $row) {
+                $newdata['id_user'] = $row['id_user'];
+                $newdata['name'] = $row['name'];
+                $newdata['email'] = $row['email'];
+                $newdata['logged_in'] = TRUE;
+            }
+            $this->session->set_userdata($newdata);
+        }
+
+        redirect('http://pineappme:81/index.php/', 'refresh');
     }
 
     //Функция логина с редиректом
@@ -63,8 +92,8 @@ class User extends CI_Controller{
                 );
                 $this->session->set_userdata($newdata);
             }
+            redirect('http://pineappme:81/index.php/', 'refresh');
         }
-        redirect('http://pineappme:81/index.php/', 'refresh');
     }
 
 
@@ -164,16 +193,12 @@ class User extends CI_Controller{
             $role = $this->input->post('role');
             $img = $this->input->post('img');
             $password = $this->input->post('password');
-            $sql = "UPDATE `users` SET `id_user`=" . (string)$this->db->escape($id_user) .
-                   ",`name`=" . (string)$this->db->escape($name) .
-                   ",`email`=" . (string)$this->db->escape($email) .
-                   ",`about`=" . (string)$this->db->escape($about) .
-                   ",`sity`=" . (string)$this->db->escape($sity) .
-                   ",`birthday`=" . $this->db->escape($birthday) .
-                   ",`role`=" . (string)$this->db->escape($role) .
-                   ",`img`=" . (string)$this->db->escape($img) .
-                   ",`password`=" . (string)$this->db->escape($password) .
-                   " WHERE id_user =" . (string)$this->db->escape($id_user);
+            $sql = "UPDATE `users` SET `id_user`=".$this->db->escape($id_user).
+                   ",`name`=".(string)$this->db->escape($name).",`email`=".(string)$this->db->escape($email).
+                   ",`about`=".$this->db->escape($about).",`sity`=".$this->db->escape($sity).
+                   ",`birthday`=".$this->db->escape($birthday).",`role`=".(string)$this->db->escape($role).
+                   ",`img`=".(string)$this->db->escape($img).",`password`=".(string)$this->db->escape($password).
+                   " WHERE id_user =".(string)$this->db->escape($id_user);
             if ($this->db->query($sql)) {
                 echo 'Информация изменена';
             } else echo 'Ошибка базы данных';
@@ -181,7 +206,6 @@ class User extends CI_Controller{
             $this->load->view('user_edit', array('data' => $this->db->query($user_data)));
             $this->load->view('footer');
         }
-
     }
 
     //TODO подумать над разбитием этого метода на два
@@ -201,7 +225,7 @@ class User extends CI_Controller{
             $this->load->view('user', array('object' => $object, 'images' => $images));
             $this->load->view('footer');
         } else if ($id_user != null) {
-            $sql = "SELECT * FROM `users` WHERE id_user = ". (string)$this->db->escape($id_user);
+            $sql = "SELECT * FROM `users` WHERE id_user = ".(string)$this->db->escape($id_user);
             $object = $query = $this->db->query($sql);
             $sql = "SELECT * FROM images WHERE id_user =".(string)$this->db->escape($id_user);
             $images = $query = $this->db->query($sql);
@@ -228,7 +252,7 @@ class User extends CI_Controller{
     //Устанавливаем картинку для профиля из загруженных
     public function setImageFromImages(){
         if($this->session->userdata('id_user') && $this->input->get_post('id_image', TRUE) ){
-            $sql = "UPDATE `users` SET `img`=".$this->db->escape($this->input->get_post('id_image', TRUE))
+            $sql = "UPDATE `users` SET `id_image`=".$this->db->escape($this->input->get_post('id_image', TRUE))
                    ." WHERE id_user =".(string)$this->db->escape($this->session->userdata('id_user'));
             if(!$this->db->query($sql)){
                 echo 'Ошибка базы данных';
@@ -279,19 +303,19 @@ class User extends CI_Controller{
     public function sendEmailMessage(){
         $this->load->library('email');
         $config['protocol'] = 'sendmail';
-        $config['mailpath'] = '/usr/sbin/sendmail';
         $config['charset'] = 'iso-8859-1';
         $config['wordwrap'] = TRUE;
         $this->email->initialize($config);
-
-        $this->email->from('omgwtf@mail.ru', 'Nikifor');
+        $this->email->from('nikiformalkov@gmail.com', 'Your Name');
         $this->email->to('nikiforma@mail.ru');
-
-        $this->email->subject('Тестовое сообщение');
-        $this->email->message('Проверка класса email.');
-
-        if($this->email->send()){
-            echo 'Some error';
-        }
+        $this->email->subject('Email Test');
+        $this->email->message('Testing the email class.');
+        $this->email->send();
     }
+
+    public function randomString(){
+        echo random_string('alnum', 16);
+    }
+
+
 }
