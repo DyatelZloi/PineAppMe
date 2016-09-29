@@ -31,6 +31,9 @@ class Message extends CI_Controller{
 
     }
 
+    //Нужно думать, что-то реально сложно. Оу они пойдут куда-то. Попьём чаю пока никто не видит.
+    //Получаем пока только последнее сообщение, похоже с каждым прогоном фореч массив меняется и это логично, остаётся только
+    //придумать как действительно вывести всё
     //Если хочешь возвращать значение тебе неободимо сохранять запрос в отдельной переменной
     //Получить все сообщения
     public function getAllMessage(){
@@ -38,6 +41,7 @@ class Message extends CI_Controller{
             $sql = "SELECT * FROM messages WHERE id_user =".(string)$this->db->escape($this->session->userdata('id_user')).
                    " OR id_companion =".(string)$this->db->escape($this->session->userdata('id_user'));
             $object = $this->db->query($sql);
+            $allmessage = array();
             $message = array();
             foreach($object ->result_array() as $notRow){
                 $message['id_message'] = $notRow['id_message'];
@@ -46,8 +50,9 @@ class Message extends CI_Controller{
                 $message['message'] = $notRow['message'];
                 $message['data'] = $notRow['data'];
                 $message['read'] = $notRow['read'];
-                echo json_encode($message);
+                array_push($allmessage,$message);
             }
+            print json_encode($allmessage);
         }
     }
 

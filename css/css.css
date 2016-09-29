@@ -1,0 +1,19 @@
+.img-radius{
+    margin: 0 0 -10px;
+    width: 30px;
+    height: 30px;
+    display: block;
+    border-radius: 100%;
+    border: 3px solid #f4ebe4;
+    position: relative;
+}
+
+.buttons-head-1{
+    color: #000;
+    background-color: #fff;
+    line-height: 35px;
+    display: inline-block;
+    padding-left: 25px;
+    padding-right: 25px;
+    border-radius: 3px;
+}

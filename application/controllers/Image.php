@@ -14,9 +14,9 @@ class Image extends CI_Controller{
     public function index(){
         $sql = "SELECT * FROM `images`";
         $images_data = array('images_data' => $query = $this->db->query($sql));
-        $this->load->view('header', array('title' => 'Все картинки'));
+        $this->load->view('indexHeader', array('title' => 'Все картинки'));
         $this->load->view('index',$images_data);
-        $this->load->view('footer');
+        $this->load->view('indexFooter');
     }
 
     //Показывает загрузочную форму
@@ -81,9 +81,10 @@ class Image extends CI_Controller{
             $like_data = $this->db->query($sql);
             $sql = "UPDATE images SET views = views + 1 WHERE id_image = ".$this->db->escape($id_image);
             $this->db->query($sql);
-            $this->load->view('header', array('title' => 'Просмотр изображения'));
-            $this->load->view('image',array('images_data' => $images_data,'like_data' => $like_data));
-            $this->load->view('footer');
+            $sql = "SELECT @n:=@n+1 AS row_number, id_image, path FROM (SELECT @n:=0, id_image, path FROM images t1 WHERE
+            id_image>".$this->db->escape($this->input->post('id'))." ORDER by id_image LIMIT 0,9) t2";
+            $img_data = $this->db->query($sql);
+            $this->load->view('image',array('images_data' => $images_data,'like_data' => $like_data, 'img_data' => $img_data));
         } else if ($id != null){
             $id_image = $id;
             $sql = "SELECT * FROM `images` WHERE id_image = (".$this->db->escape($id_image).")";
@@ -92,10 +93,49 @@ class Image extends CI_Controller{
             $like_data = $query = $this->db->query($sql);
             $sql = "UPDATE images SET views = views + 1 WHERE id_image = ".$this->db->escape($id_image);
             $this->db->query($sql);
-            $this->load->view('header', array('title' => 'Просмотр изображения'));
-            $this->load->view('image',array('images_data' => $images_data,'like_data' => $like_data));
-            $this->load->view('footer');
+            $sql = "SELECT @n:=@n+1 AS row_number, id_image, path FROM (SELECT @n:=0, id_image, path FROM images t1 WHERE
+            id_image>".$this->db->escape($id)." ORDER by id_image LIMIT 0,9) t2";
+            $img_data = $this->db->query($sql);
+            $this->load->view('image',array('images_data' => $images_data,'like_data' => $like_data, 'img_data' => $img_data));
         } else echo 'Не введён id';
+    }
+
+    //
+    //SELECT @n:=@n+1 AS row_number, id_image, path FROM (SELECT @n:=0, id_image, path FROM images t1 WHERE id_image>56 ORDER by id_image LIMIT 0,3) t2
+    public function getNextByIdAjax($id = null){
+        if ($id != null){
+            $id_image = $id;
+            $sql = "SELECT @n:=@n+1 AS row_number, id_image, path FROM (SELECT @n:=0, id_image, path FROM images t1 WHERE
+id_image>".$this->db->escape($id_image)." ORDER by id_image LIMIT 0,1) t2";
+            $images_data = $this->db->query($sql);
+            $object = array();
+            foreach($images_data ->result_array() as $notRow){
+                $object['id_image'] = $notRow['id_image'];
+                $object['path'] = $notRow['path'];
+            }
+            $sql = "SELECT * FROM `like` WHERE id_image = (".$this->db->escape($id_image).")";
+            $like_data = $query = $this->db->query($sql);
+            $sql = "UPDATE images SET views = views + 1 WHERE id_image = ".$this->db->escape($id_image);
+            echo json_encode($object);
+        }
+    }
+
+    public function getPrevByIdAjax($id = null){
+        if ($id != null){
+            $id_image = $id;
+            $sql = "SELECT @n:=@n+1 AS row_number, id_image, path FROM (SELECT @n:=0, id_image, path FROM images t1 WHERE
+id_image<".$this->db->escape($id_image)." ORDER by id_image DESC LIMIT 0,1) t2";
+            $images_data = $this->db->query($sql);
+            $object = array();
+            foreach($images_data ->result_array() as $notRow){
+                $object['id_image'] = $notRow['id_image'];
+                $object['path'] = $notRow['path'];
+            }
+            $sql = "SELECT * FROM `like` WHERE id_image = (".$this->db->escape($id_image).")";
+            $like_data = $query = $this->db->query($sql);
+            $sql = "UPDATE images SET views = views + 1 WHERE id_image = ".$this->db->escape($id_image);
+            echo json_encode($object);
+        }
     }
 
     private function getAllByIdUser($id = null){
@@ -149,7 +189,7 @@ class Image extends CI_Controller{
                 $config['new_image'] = './img/mini/'.$file_name['file_name'];
                 $config['create_thumb'] = FALSE;
                 $config['maintain_ratio'] = TRUE;
-                $config['height']	= 240;
+                $config['height']	= 241;
                 $this->load->library('image_lib', $config);
                 $this->image_lib->resize();
                 $this->load->view('header', array('title' => 'Картинка загружена'));
@@ -249,9 +289,9 @@ class Image extends CI_Controller{
     public function getPopular(){
         $sql = "SELECT * FROM `images` ORDER BY views DESC";
         $images_data = array('images_data' => $query = $this->db->query($sql));
-        $this->load->view('header', array('title' => 'Все картинки'));
+        $this->load->view('indexHeader', array('title' => 'Все картинки'));
         $this->load->view('index',$images_data);
-        $this->load->view('footer');
+        $this->load->view('indexFooter');
     }
 
     //чуть позже подумаем над улучшением данного кода

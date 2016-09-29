@@ -59,6 +59,7 @@
 </div>
 <button type="button" onclick="getAllMessages()"> Все сообщения </button>
 
+
 <!--
     Получение текущей даты
     echo (date("d.m.Y h:I:s"));
@@ -133,17 +134,34 @@
         websocket.send(JSON.stringify(msg));
         addMessage(MyComp);
     }
-        //Получаем все сообщения и постараемся распихать их по нужным чатам
-        function getAllMessages(){
-            xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (xhttp.status == 200){
-                    document.getElementById("ajax").innerHTML = xhttp.responseText;
+
+    //Теперь мы как раз таки получаем все сообщения и можем даже с ними что-то делать, это свершилось. Было сложно.
+    //Получаем все сообщения и постараемся распихать их по нужным чатам
+    function getAllMessages(){
+        var text;
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState==4 && xhttp.status==200){
+                var jsonText = JSON.parse(xhttp.responseText);
+                var jsonText2;
+                for (key in jsonText) {
+                    if (jsonText.hasOwnProperty(key)) {
+                        console.log("Ключ = " + key);
+                        console.log("Значение = " + jsonText[key]);
+                        jsonText2 = jsonText[key];
+                        for (key in jsonText2) {
+                            if (jsonText2.hasOwnProperty(key)) {
+                                console.log("Ключ = " + key);
+                                console.log("Значение = " + jsonText2[key]);
+                            }
+                        }
+                    }
                 }
-            };
-            xhttp.open("GET", "http://pineappme:81/index.php/message/getAllMessage");
-            xhttp.send();
-        }
+            }
+        };
+        xhttp.open("GET", "http://pineappme:81/index.php/message/getAllMessage");
+        xhttp.send();
+    }
 
     //Клиет на JavaScript добавить открытие окна чата, если нам пришло сообщение или просто небольшое окошко при клике на котором
     //Будем выводить сам чат

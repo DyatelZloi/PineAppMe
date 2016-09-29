@@ -1,0 +1,302 @@
+@media only screen and (max-width : 1200px) {
+	.profile_wrapper_2 {
+		padding-top: 5px;
+	}
+	.profile_photos {
+		margin-left: 10px;
+	}
+	.profile_photos .large_photo {
+		width: 120px;
+		height: 120px;
+	}
+	.profile_photos .mini_photo {
+		top: 36px;
+	}
+	.profile_name_description_wrap {
+		margin-right: 0;
+	}
+	/*str photos*/
+	.str_photo_prev, .str_photo_next {
+		width: 50px;
+	}
+	.main_str_photo {
+		width: 100%;
+		margin-left: 0;
+	}
+	.photo_mini_items .photo_item {
+		margin-top: 10px;
+	}
+	.persons_box {
+		width: 320px;
+		margin-right: 15px;
+	}
+	.private_wrapper {
+		max-width: 605px;
+	}
+	.message_avatar {
+		margin-right: 15px;
+	}
+	.message_input {
+		width: 357px;
+	}
+	.send_message_button {
+		margin-left: 15px;
+	}
+	.sub_item {
+		width: 294px;
+	}
+	.sub_person_subs {
+		margin: 0px 20px;
+	}
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 992px) {
+	.profile_menu li a {
+		padding: 0 10px 5px 10px;
+	}
+	.profile_photos .large_photo {
+		top: 6px;
+	}
+	.profile_name_description_wrap {
+		float: none;
+	}
+	.profile_wrapper_2 {
+		padding-top: 0;
+	}
+	.profile_action {
+		margin-top: 5px;
+	}
+	.profile_name_description_wrap {
+		margin-left: 230px;
+	}
+	.profile_photos .mini_photo {
+		top: 75px;
+	}
+	.profile_info_right {
+		margin-top: 90px;
+	}
+	.profile_info_right {
+		float: none;
+		margin: 0;
+		text-align: center;
+	}
+	.profile_info_right li {
+		float: none;
+		display: inline-block;
+	}
+	/*str photos */
+	.str_photo_prev, .str_photo_next {
+		width: 40px;
+	}
+	.persons_box {
+		margin-right: 5px;
+		padding: 10px 0 10px 10px;
+	}
+	.private_wrapper {
+		max-width: 395px;
+	}
+	.private_item_1 {
+		padding: 15px;
+	}
+	.private_item_2 {
+		padding: 15px;
+	}
+	.private_item_2 {
+		text-align: center;
+	}
+	.message_avatar {
+		margin-right: 0;
+		float: none;
+	}
+	.message_input {
+		float: none;
+		width: 320px;
+		margin: 15px 0;
+	}
+	.send_message_button {
+		float: none;
+		margin-left: 0;
+	}
+	.subscribers > .container > .row {
+		padding: 0;
+	}
+	.sub_item {
+		width: 237px;
+	}
+	.sub_person_subs {
+		margin: 0px 5px;
+	}
+	.sub_person_info {
+		margin-bottom: 15px;
+	}
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+	
+	.header_timer {
+		display: none;
+	}
+	.communication {
+		float: none;
+		display: block;
+	}
+	.fa-arrow-right {
+		margin: 0;
+	}
+	.logo__subscribers {
+		display: block;
+	}
+	.header__logo-link {
+		margin-right: 0;
+	}
+	.header_top {
+		text-align: center;
+	}
+	.tab_item img {
+		margin-right: 0;
+	}
+	.profile_name_description_wrap {
+		text-align: center;
+		margin-left: 0;
+		margin-top: 90px;
+	}
+	.profile_wrapper {
+		margin-top: 0;
+		text-align: center;
+	}
+	.profile_photos {
+		margin-left: 0;
+	}
+	.profile_photos .large_photo {
+		position: static;
+	}
+	.profile_photos .mini_photo {
+		top: 60px;
+	}
+	.profile_name_description_wrap {
+		margin-top: 0;
+	}
+	.profile_info_right {
+		padding-bottom: 10px;
+	}
+	.profile_action li {
+		float: none;
+		display: inline-block;
+	}
+	.profile_action {
+		float: none;
+		text-align: center;
+	}
+	.profile_menu {
+		float: none;
+		text-align: center;
+	}
+	.profile_menu li {
+		float: none;
+		display: inline-block;
+	}
+	.img_item {
+		margin-bottom: 10px;
+	}
+	
+	/* str photos */
+	.str_photo_prev, .str_photo_next {
+		display: block;
+		height: auto;
+	}
+	.str_photo_prev i, .str_photo_next i {
+		margin-top: 0;
+		top: 40%;
+	}
+	.main_str_photo {
+		width: 100%;
+	}
+	.photo_and_buttons {
+		height: auto;
+	}
+	
+	.persons_box {
+		width: 100%;
+		text-align: center;
+	}
+	.person_avatar {
+		float: none;
+	}
+	.person_info {
+		float: none;
+		margin-left: 0;
+	}
+	.private_wrapper {
+		margin-top: 10px;
+		max-width: none;
+		width: 100%;
+	}
+	.message_input {
+		width: 100%;
+	}
+	.sub_item {
+		margin-bottom: 15px;
+	}
+	.top_header_menu .fa-envelope:after {
+		padding-left: 0px;
+	}
+}
+
+/* Extra Small Devices, Phones */ 
+@media only screen and (max-width : 480px) {
+	.header_search_header {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	.tab_item img {
+		margin-right: 0;
+		margin-bottom: 5px;
+	}
+	.tabs {
+		margin-bottom: 10px;
+	}
+	.fa-arrow-right {
+		display: none;
+	}
+	.header_buttons a {
+		width: 160px;
+		margin: 40px auto;
+		display: block;
+	}
+	.header_buttons a:first-child {
+		margin-top: 0;
+	}
+	.header_buttons a:last-child {
+		margin-bottom: 0;
+	}
+	.profile_menu li a {
+		padding: 0 3px 5px 3px;
+	}
+	.profile_menu {
+		margin-right: 0;
+	}
+	.send_photo_button {
+		padding: 12px 10px;
+	}
+	.send_photo_dots {
+		margin-left: 10px;
+	}
+	.str_photo_prev i, .str_photo_next i {
+		top:35%;
+	}
+}
+
+/* Custom, iPhone Retina */ 
+@media only screen and (max-width : 320px) {
+	.profile_menu li a {
+		font-size: 11px;
+	}
+	.profile_menu li a {
+		padding: 0 3px 5px 3px;
+	}
+	.str_photo_prev i, .str_photo_next i {
+		top:30%;
+	}
+}

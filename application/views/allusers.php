@@ -17,6 +17,6 @@
         <li>Город : <?php echo $row['sity']?></li> <br>
         <li>День рожденья : <?php echo $row['birthday']?></li> <br>
         <li><?php echo $row['role']?></li> <br>
-        <li><?php echo $row['img']?></li> <br>
+        <li><?php echo $row['id_image']?></li> <br>
     <?php endforeach; ?>
 </ul>

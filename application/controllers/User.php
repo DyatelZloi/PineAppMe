@@ -2,7 +2,7 @@
 class User extends CI_Controller{
 
     //TODO заменить post на get_post, пример : $this->input->get_post('id_image', TRUE)
-    //TODO проверки, кучу проверок.
+    //TODO проверки, кучу проверок
     public function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url', 'string'));
@@ -14,6 +14,7 @@ class User extends CI_Controller{
         $this->login();
     }
 
+    //TODO выпилить лишнюю функцию логина для сайта
     //Функция логина
     public function login(){
         $this->form_validation->set_rules('email', 'Email адрес', 'required');
@@ -33,6 +34,7 @@ class User extends CI_Controller{
                     'id_user' => $user['id_user'],
                     'name'  => $user['name'],
                     'email'     => $user['email'],
+                    'path' => $user['path'],
                     'logged_in' => TRUE
                 );
                 $this->session->set_userdata($newdata);
@@ -41,6 +43,7 @@ class User extends CI_Controller{
         }
     }
 
+    //Логин/регистрация через модуль ulogin, если же юзера нет, значит создаём его.
     public function loginFromULogin(){
         if ($this->input->post('token')) {
             $s = file_get_contents('http://ulogin.ru/token.php?token=' . $_POST['token'] . '&host=' . $_SERVER['HTTP_HOST']);
@@ -54,19 +57,31 @@ class User extends CI_Controller{
                 $sql = "INSERT INTO `users` (`id_user`, `name`, `email`) VALUES(".$this->db->escape($id_user).",
                        ".$this->db->escape($name).",".$this->db->escape($email).")";
                 $this->db->query($sql);
+                $sql = "SELECT * FROM `users` LEFT OUTER JOIN `images` USING (id_image) WHERE users.email = (".$this->db->escape($email).")";
+                $object = $this->db->query($sql);
+                foreach ($object->result_array() as $row) {
+                    $newdata['id_user'] = $row['id_user'];
+                    $newdata['name'] = $row['name'];
+                    $newdata['email'] = $row['email'];
+                    $newdata['path'] = $row['path'];
+                    $newdata['logged_in'] = TRUE;
+                }
+                $this->session->set_userdata($newdata);
+                redirect('http://pineappme:81/index.php/', 'refresh');
+            } else {
+                $sql = "SELECT * FROM `users` LEFT OUTER JOIN `images` USING (id_image) WHERE users.email = (".$this->db->escape($email).")";
+                $object = $this->db->query($sql);
+                foreach ($object->result_array() as $row) {
+                    $newdata['id_user'] = $row['id_user'];
+                    $newdata['name'] = $row['name'];
+                    $newdata['email'] = $row['email'];
+                    $newdata['path'] = $row['path'];
+                    $newdata['logged_in'] = TRUE;
+                }
+                $this->session->set_userdata($newdata);
+                redirect('http://pineappme:81/index.php/', 'refresh');
             }
-            $sql = "SELECT * FROM users WHERE email = " . $this->db->escape($email);
-            $object = $this->db->query($sql);
-            foreach ($object->result_array() as $row) {
-                $newdata['id_user'] = $row['id_user'];
-                $newdata['name'] = $row['name'];
-                $newdata['email'] = $row['email'];
-                $newdata['logged_in'] = TRUE;
-            }
-            $this->session->set_userdata($newdata);
         }
-
-        redirect('http://pineappme:81/index.php/', 'refresh');
     }
 
     //Функция логина с редиректом
@@ -86,8 +101,9 @@ class User extends CI_Controller{
             if ($us_pass == $password){
                 $newdata = array(
                     'id_user' => $user['id_user'],
-                    'name'  => $user['name'],
-                    'email'     => $user['email'],
+                    'name' => $user['name'],
+                    'email' => $user['email'],
+                    'path' => $user['path'],
                     'logged_in' => TRUE
                 );
                 $this->session->set_userdata($newdata);
@@ -105,9 +121,7 @@ class User extends CI_Controller{
         $this->form_validation->set_rules('email', 'Email адрес', 'required|valid_email|is_unique[users.email]');
         $this->form_validation->set_rules('password', 'Пароль', 'required');
         if ($this->form_validation->run() == FALSE) {
-            $this->load->view('header', array('title' => 'Регистрация'));
             $this->load->view('registration');
-            $this->load->view('footer');
         }
         else {
             $id_user = $this->input->post('id_user');
@@ -115,11 +129,7 @@ class User extends CI_Controller{
             $email = $this->input->post('email');
             $password = $this->input->post('password');
             if(!$this->new_user($id_user, $name, $email, $password)) echo 'Ошибка';
-            $this->load->view('header', array('title' => 'Регистрация'));
             $this->load->view('registration_success');
-            $this->load->view('footer');
-
-
         }
     }
 
@@ -130,6 +140,7 @@ class User extends CI_Controller{
         $this->session->unset_userdata('logged_in');
         $this->session->unset_userdata('id');
         $this->session->unset_userdata('id_user');
+        $this->session->unset_userdata('path');
         if ($log != null) redirect('http://pineappme:81/index.php/', 'refresh');
 
     }
@@ -141,15 +152,17 @@ class User extends CI_Controller{
         $this->session->unset_userdata('logged_in');
         $this->session->unset_userdata('id');
         $this->session->unset_userdata('id_user');
+        $this->session->unset_userdata('path');
     }
 
 
     //получаем пользователя по емайл
     private function getByEmail($email){
-        $sql = "SELECT * FROM users WHERE email = (".$this->db->escape($email).")";
+        $sql = "SELECT * FROM `users` LEFT OUTER JOIN `images` USING (id_image) WHERE users.email = (".$this->db->escape($email).")";
         $query = $this->db->query($sql);
         $object = array();
         foreach ($query->result_array() as $row){
+            $object['path'] = $row['path'];
             $object['id_user'] = $row['id_user'];
             $object['password'] = $row['password'];
             $object['name'] = $row['name'];
@@ -217,21 +230,21 @@ class User extends CI_Controller{
     public function home_page($id_user = null){
         if ($this->input->post('id_user')) {
             $id_user = $this->input->post('id_user');
-            $sql = "SELECT * FROM `users` WHERE id_user =".(string)$this->db->escape($id_user);
+            $sql = "SELECT * FROM `users` LEFT OUTER JOIN `images` USING (id_image) WHERE users.id_user = ".(string)$this->db->escape($id_user);
             $object = $query = $this->db->query($sql);
             $sql = "SELECT * FROM images WHERE id_user =".(string)$this->db->escape($id_user);
             $images = $query = $this->db->query($sql);
-            $this->load->view('header', array('title' => 'Профиль'));
+            $this->load->view('indexHeader', array('title' => 'Профиль'));
             $this->load->view('user', array('object' => $object, 'images' => $images));
-            $this->load->view('footer');
+            $this->load->view('indexFooter');
         } else if ($id_user != null) {
-            $sql = "SELECT * FROM `users` WHERE id_user = ".(string)$this->db->escape($id_user);
+            $sql = "SELECT * FROM `users` LEFT OUTER JOIN `images` USING (id_image) WHERE users.id_user = ".(string)$this->db->escape($id_user);
             $object = $query = $this->db->query($sql);
             $sql = "SELECT * FROM images WHERE id_user =".(string)$this->db->escape($id_user);
             $images = $query = $this->db->query($sql);
-            $this->load->view('header', array('title' => 'Профиль'));
+            $this->load->view('indexHeader', array('title' => 'Профиль'));
             $this->load->view('user', array('object' => $object, 'images' => $images));
-            $this->load->view('footer');
+            $this->load->view('indexFooter');
         } else echo 'Такой пользователь не найден';
     }
 
@@ -312,10 +325,10 @@ class User extends CI_Controller{
         $this->email->message('Testing the email class.');
         $this->email->send();
     }
-
-    public function randomString(){
-        echo random_string('alnum', 16);
-    }
-
+    //Сообщение с подтверждение будет тогда только если мы через другие соц сети регаемся, опять же ошибка, если запретить email
+    //Вааах, почему-то после того, как я сделал страницу с регистрацией и произвёл некоторые настройки она перестала отрабатывать как
+    //надо
+    //некоторые баги фиксятся больше часа, хоть они всего-лишь мелкие баги, ибо ты не совсем понимаешь их происхождение и многое другое
+    //некоторые из них настолько мелки и смешны, очевидны, что сам не понимаешь почему ты этого не предусмотрел
 
 }
