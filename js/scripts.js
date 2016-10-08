@@ -80,3 +80,43 @@ function unsubscribe(){
 
 }
 
+function getUserImage(id_user){
+    console.log(id_user);
+    var userImage = document.getElementById('userImage');
+    var userImageGreen = document.getElementById('userImageGreen');
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200){
+            var jsonText = xhttp.responseText;
+            console.log(jsonText);
+            var jsonText2 = JSON.parse(jsonText);
+            for (key in jsonText) {
+                    userImage.innerHTML = "<img class='img-radius' src='/../../img/mini/" + jsonText2['path'] + "' alt='photo'>";
+                    userImageGreen.innerHTML = "<img class='img-radius' src='/../../img/mini/" + jsonText2['path'] + "' alt='photo'>";
+
+            }
+        }
+    };
+    xhttp.open("GET", "http://pineappme:81/index.php/image/getImageUser?id_user="+id_user);
+    xhttp.send();
+}
+
+function getUserImage2(id_user){
+    console.log(id_user);
+    var userImage = document.getElementById('userImage');
+    var userImageGreen = document.getElementById('userImageGreen');
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200){
+            var jsonText = xhttp.responseText;
+            console.log(jsonText);
+            var jsonText2 = JSON.parse(jsonText);
+            for (key in jsonText) {
+                userImageGreen.innerHTML = "<img class='img-radius' src='/../../img/mini/" + jsonText2['path'] + "' alt='photo'>";
+
+            }
+        }
+    };
+    xhttp.open("GET", "http://pineappme:81/index.php/image/getImageUser?id_user="+id_user);
+    xhttp.send();
+}

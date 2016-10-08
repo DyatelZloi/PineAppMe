@@ -11,19 +11,20 @@
     <link rel="stylesheet" href="/../../css/style.css">
     <link rel="stylesheet" href="/../../css/media.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="/../../js/scripts.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&subset=cyrillic" rel="stylesheet">
     <link rel="stylesheet" href="/../../css/css.css">
-    <title>Страница Фотографий - Pineappme</title> <!-- Название страницы отображаемое в окне браузера сверху -->
+    <title>Страница Фотографий - Iananas</title> <!-- Название страницы отображаемое в окне браузера сверху -->
 </head>
 
-<body class="str_body">
-<header class="header_str_photo">
+<body class="str_body" onload="getUserImage2('<?php echo $this->session->userdata('id_user') ?>')">
+<header class="header_str_photo block-header">
     <div class="container">
         <div class="header_top clearfix">
             <div class="row">
                 <div class="col-xs-12 col-sm-4">
                     <div class="top-logo-wrapper">
-                        <a href="http://pineappme:81/index.php" class="header__logo-link">Pineappme</a>
+                        <a href="<?php echo SITE_NAME?>index.php" class="header__logo-link">iananas</a>
                         <?php if($this->session->userdata('id_user') != null):?>
                             <a href="#" class="logo__subscribers">подписки</a>
                         <?php endif; ?>
@@ -38,15 +39,15 @@
                                 <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a></li>
                                 <li>
-                                    <a  class="img-a" href="http://pineappme:81/index.php/user/home_page/<?php echo $this->session->userdata('id_user') ?>">
+                                    <a id="userImageGreen" class="img-a" href="<?php echo SITE_NAME?>index.php/user/home_page/<?php echo $this->session->userdata('id_user') ?>">
                                         <img class="img-radius" src="/../../img/mini/<?php echo $this->session->userdata('path') ?>">
                                     </a>
                                 </li>
                             </ul>
                         <?php endif; ?>
                         <?php if($this->session->userdata('id_user') == null):?>
-                            <a class="buttons-head-1" href="http://pineappme:81/index.php/user/login"> Войти </a>
-                            <a class="buttons-head-1" href="http://pineappme:81/index.php/user/registration"> Зарегистрироваться </a>
+                            <a class="buttons-head-1" href="<?php echo SITE_NAME?>index.php/user/login"> Войти </a>
+                            <a class="buttons-head-1" href="<?php echo SITE_NAME?>index.php/user/registration"> Зарегистрироваться </a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -105,44 +106,6 @@
 
 </html>
 
-<!--
-<?php foreach ($images_data->result_array() as $row): ?>
-    <p> id картинки : <?php echo $row['id_image']?></p>
-    <p> id пользователя : <?php echo $row['id_user']?></p>
-    <p> просмотры : <?php echo $row['views']?></p>
-    <p> количество лайков : <?php echo $row['likes']?></p>
-    <br>
-    <img class="img-thumbnail" src="<?php echo '/../../uploads/'.$row['path']; ?>">
-    <br>
-    <?php echo form_open('image/like/') ?>
-        <input id="id_image" type="hidden" name="id_image" value="<?php echo $row['id_image']?>">
-        <input id="id_user" type="hidden" name="id_user" value="<?php echo $this->session->userdata('id_user') ?>">
-        <input type="submit" value="Лайк">
-    </form>
-    <br>
-    <?php echo form_open('subscription/subscribe/') ?>
-        <input type="hidden" name="id_user" value="<?php echo $row['id_user']?>">
-        <input type="submit" value="Subscribe">
-    </form>
-    <br>
-    <?php echo form_open('image/del/') ?>
-        <input type="hidden" name="path" value="<?php echo $row['path']?>">
-        <input type="hidden" name="id" value="<?php echo $row['id_image']?>">
-        <input type="submit" value="Удалить">
-    </form>
-    <div id="LikeAndDislike">
-        <input id="likeAjax" type="button" value="Лайк AJAX" onclick="likeImage()">
-    </div>
-    <a href="http://pineappme:81/index.php/user/setImageFromImages?id_image=<?php echo $row['id_image']?>"> Установить на аватар </a>
-<?php endforeach; ?>
-<ul id="delete">
-        <li> Лайкнувшие пользователи : </li>
-    <?php foreach ($like_data->result_array() as $row): ?>
-        <li id = "<?php echo $row['id_user']?>" value="<?php echo $row['id_user']?>"><?php echo $row['id_user']?></li>
-    <?php endforeach; ?>
-</ul>
--->
-
 <script type='text/javascript'>
 
     if (document.readyState === "complete") {
@@ -199,7 +162,7 @@
             if (xhttp.readyState == 4 && xhttp.status == 200)
                 document.getElementById("ajax").innerHTML = xhttp.responseText;
         };
-        xhttp.open("GET", "http://pineappme:81/index.php/image/dislikeajax?id_image="+x+"&id_user="+y, true);
+        xhttp.open("GET", "<?php echo SITE_NAME?>index.php/image/dislikeajax?id_image="+x+"&id_user="+y, true);
         xhttp.send();
         createLike();
     };
@@ -213,7 +176,7 @@
             if (xhttp.readyState == 4 && xhttp.status == 200)
                 document.getElementById("ajax").innerHTML = xhttp.responseText;
         };
-        xhttp.open("GET", "http://pineappme:81/index.php/image/likeajax?id_image="+x+"&id_user="+y, true);
+        xhttp.open("GET", "<?php echo SITE_NAME?>index.php/image/likeajax?id_image="+x+"&id_user="+y, true);
         xhttp.send();
         createDislike();
     };
@@ -250,7 +213,7 @@
                 }
             }
         }
-        xhttp.open("GET", "http://pineappme:81/index.php/image/getNextByIdAjax/"+idImage);
+        xhttp.open("GET", "<?php echo SITE_NAME?>index.php/image/getNextByIdAjax/"+idImage);
         xhttp.send();
     }
 
@@ -270,7 +233,7 @@
                 }
             }
         }
-        xhttp.open("GET", "http://pineappme:81/index.php/image/getPrevByIdAjax/"+idImage);
+        xhttp.open("GET", "<?php echo SITE_NAME?>index.php/image/getPrevByIdAjax/"+idImage);
         xhttp.send();
     }
 
@@ -303,7 +266,7 @@
                 }
             }
         };
-        xhttp.open("GET", "http://pineappme:81/index.php/message/getAllMessage");
+        xhttp.open("GET", "<?php echo SITE_NAME?>index.php/message/getAllMessage");
         xhttp.send();
     }
 

@@ -13,8 +13,9 @@
     <link rel="stylesheet" href="/../../css/media.css">
     <link rel="stylesheet" href="/../../css/css.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="/../../js/scripts.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&subset=cyrillic" rel="stylesheet">
     <title>Главная - Pineappme</title> <!-- Название страницы отображаемое в окне браузера сверху -->
 </head>
 
-<body class="home_document">
+<body class="home_document" onscroll="chekScroll()" onload="getUserImage('<?php echo $this->session->userdata('id_user') ?>')">

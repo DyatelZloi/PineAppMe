@@ -1,13 +1,4 @@
 <?php
-//$s = file_get_contents('http://ulogin.ru/token.php?token=' . $_POST['token'] . '&host=' . $_SERVER['HTTP_HOST']);
-//$user = json_decode($s, true);
-//echo $user['network'].'<br>'; //- соц. сеть, через которую авторизовался пользователь
-//echo $user['identity'].'<br>'; //- уникальная строка определяющая конкретного пользователя соц. сети
-//echo $user['first_name'].'<br>'; //- имя пользователя
-//echo $user['last_name'].'<br>'; //- фамилия пользователя
-// В таком случае авторизация происходит не через меня
-// Мы должны будем просто получать некоторые данные от социальной сети
-// Мы по идее должны перенаправить такого юзера на его страничку по емайл или ещй как-то
 $ses = $this->session->all_userdata();
 foreach($ses as $data){
     echo "$data".'<br>';
@@ -28,7 +19,7 @@ foreach($ses as $data){
     </form>
 </section>
 <br>
-<a href="http://pineappme:81/index.php/image/"> На главную</a>
+<a href="<?php echo SITE_NAME?>index.php/image/"> На главную</a>
 <br>
 <?php echo form_open('user/logout/') ?>
 <input type="submit" value="Выйти">

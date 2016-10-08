@@ -102,7 +102,7 @@
             if (xhttp.readyState == 4 && xhttp.status == 200)
                 document.getElementById("ajax").innerHTML = xhttp.responseText;
         };
-        xhttp.open("GET", "http://pineappme:81/index.php/message/addMessage?id_user="+id_user+"&id_companion="+id_companion+"&message="+message+"&data="+data, true);
+        xhttp.open("GET", "<?php echo SITE_NAME?>index.php/message/addMessage?id_user="+id_user+"&id_companion="+id_companion+"&message="+message+"&data="+data, true);
         xhttp.send();
     }
 
@@ -159,7 +159,7 @@
                 }
             }
         };
-        xhttp.open("GET", "http://pineappme:81/index.php/message/getAllMessage");
+        xhttp.open("GET", "<?php echo SITE_NAME?>index.php/message/getAllMessage");
         xhttp.send();
     }
 

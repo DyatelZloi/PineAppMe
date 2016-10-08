@@ -12,7 +12,7 @@
     <?php endforeach; ?>
 </ul>
 
-<p><a href="/index.php/Image/load">Загрузить ещё</a></p>
+<p><a href="<?php echo SITE_NAME?>index.php/Image/load">Загрузить ещё</a></p>
 
 </body>
 </html>

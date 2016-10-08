@@ -10,10 +10,11 @@
     <link rel="stylesheet" href="../../css/font-awesome.min.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/media.css">
+    <link rel="stylesheet" href="/../../css/css.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&subset=cyrillic" rel="stylesheet">
 
-    <title>Регистрация - Pineappme</title> <!-- Название страницы отображаемое в окне браузера сверху -->
+    <title>Регистрация - Iananas</title> <!-- Название страницы отображаемое в окне браузера сверху -->
 
     <script>
         // Кнопка "Далее" будет неактивна, пока не будет введен Email.
@@ -55,34 +56,35 @@
                     </p>
                 </div>
             </div>
-            <div class="row">
-                <script src="//ulogin.ru/js/ulogin.js"></script>
-                <ul class="social_enter" id="uLogin" data-ulogin="display=buttons;fields=first_name,email;
-                redirect_uri=http%3A%2F%2Fpineappme%3A81%2Findex.php%2Fuser%2FloginFromULogin;">
-                    <li ><a class="fb_soc" data-uloginbutton="facebook"><img src="../../img/fb_icon_reg.png" alt="facebook"></a></li>
-                    <li><a class="vk_soc" data-uloginbutton="vkontakte"><img src="../../img/vk_icon_reg.png" alt="vk"></a></li>
-                    <li><a class="tw_soc" data-uloginbutton="googleplus"><img src="../../img/tw_icon_reg.png" alt="twitter"></a></li>
-                    <li><a class="go_soc" data-uloginbutton = "vkontakte"><img src="../../img/go_icon_reg.png" alt="google plus"></a></li>
+            <script src="//ulogin.ru/js/ulogin.js"></script>
+            <div class="row" id="uLogin" data-ulogin="display=buttons;fields=first_name,email;redirect_uri=http%3A%2F%2Fpineappme%3A81%2Findex.php%2Fuser%2FloginFromULogin;">
+                <ul class="social_enter" >
+                    <li ><a data-uloginbutton="facebook" class="fb_soc" ><img src="../../img/fb_icon_reg.png" alt="facebook"></a></li>
+                    <li ><a data-uloginbutton="vkontakte" class="vk_soc" ><img src="../../img/vk_icon_reg.png" alt="vk"></a></li>
+                    <li ><a data-uloginbutton="twitter" class="tw_soc" ><img src="../../img/tw_icon_reg.png" alt="twitter"></a></li>
+                    <li  ><a data-uloginbutton="googleplus" class="go_soc"><img src="../../img/go_icon_reg.png" alt="google plus"></a></li>
                 </ul>
             </div>
             <div class="row">
                 <div class="email_wrap">
                     <p class="email_enter">или используй свой адрес эл. почты</p>
                     <?php echo form_open('user/registration/', array('class' => "reg_form")) ?>
-                        <input id="reg_email" type="email" placeholder="Адрес эл. почты" name="email" value="<?php echo set_value('email'); ?>" onkeyup='checkParams()'>
+                        <input id="reg_email" type="email" placeholder="Адрес эл. почты" name="email" value="<?php echo set_value('email'); ?>">
                         <!-- Очень глупо делать регистрацию только по почте, ведь любой желающий сможет авторизоваться зная почту, нужен ещё и пароль.
                             <input id="reg_email" type="text"  name="id_user" placeholder="ID пользователя" value="<?php echo set_value('id_user'); ?>">
                             <input id="reg_email" type="text" name="name" placeholder="Имя" value="<?php echo set_value('name'); ?>">
                         -->
-                            <input id="reg_email" type="password" placeholder="Пароль" name="password" value="<?php echo set_value('password'); ?>">
-                        <button id="reg_submit" disabled>Далее</button>
+                        <input  type="password" placeholder="Пароль" name="password" value="<?php echo set_value('password'); ?>">
+                        <button id="reg_submit">Далее</button>
                     </form>
-                    <p class="rules">Создавая аккаунт, ты подтверждаешь что прочитал и принял<br>
-                        <a class="rules_link" href="#">Правила сервиса</a></p>
+                    <p class="rules">
+                        Создавая аккаунт, ты подтверждаешь что прочитал и принял<br>
+                        <a class="rules_link" href="#">Правила сервиса</a>
+                    </p>
                 </div>
             </div>
         </div>
-        <div class="line_background"></div>
+        <div class="line_background fixed-bot"></div>
     </section>
 
 <!--

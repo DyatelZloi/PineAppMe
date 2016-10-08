@@ -100,7 +100,7 @@ class Image extends CI_Controller{
         } else echo 'Не введён id';
     }
 
-    //
+    //Получить следующую картинку
     //SELECT @n:=@n+1 AS row_number, id_image, path FROM (SELECT @n:=0, id_image, path FROM images t1 WHERE id_image>56 ORDER by id_image LIMIT 0,3) t2
     public function getNextByIdAjax($id = null){
         if ($id != null){
@@ -120,6 +120,7 @@ id_image>".$this->db->escape($id_image)." ORDER by id_image LIMIT 0,1) t2";
         }
     }
 
+    //Получить предыдущую картинку
     public function getPrevByIdAjax($id = null){
         if ($id != null){
             $id_image = $id;
@@ -136,6 +137,18 @@ id_image<".$this->db->escape($id_image)." ORDER by id_image DESC LIMIT 0,1) t2";
             $sql = "UPDATE images SET views = views + 1 WHERE id_image = ".$this->db->escape($id_image);
             echo json_encode($object);
         }
+    }
+
+    //Получаем маленькую картинку профиля пользователя
+    public function getImageUser($id_user = null){
+        $id_user = (string)$this->input->get('id_user');
+        $sql = "SELECT * FROM users LEFT OUTER JOIN images USING(id_image) WHERE users.id_user =".$this->db->escape($id_user);
+        $images_data = $this->db->query($sql);
+        $object = array();
+        foreach($images_data ->result_array() as $Row){
+            $object['path'] = $Row['path'];
+        }
+        echo json_encode($object);
     }
 
     private function getAllByIdUser($id = null){

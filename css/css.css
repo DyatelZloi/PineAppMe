@@ -17,3 +17,29 @@
     padding-right: 25px;
     border-radius: 3px;
 }
+
+.block-header{
+    position: fixed;
+    width: 100%;
+    top:0px;
+    z-index: 1;
+}
+
+.header-none{
+    display: none;
+}
+
+.block-header2{
+    padding-top: 7px;
+    padding-bottom: 7px;
+    background-color: #94E41A;
+    position: fixed;
+    width: 100%;
+    top:0px;
+    z-index: 1;
+    display: block;
+}
+
+.fixed-bot{
+    position: fixed;
+}

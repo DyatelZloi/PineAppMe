@@ -8,8 +8,8 @@
             <input type="hidden" name="id_user" value="<?php echo $row['id_user']?>">
             <input type="submit" value="Подписчики">
         </form>
-            <a href="http://pineappme:81/index.php/user/home_page/<?php echo $row['id_user']?>">Профиль</a>
-            <a href="http://pineappme:81/index.php/album/getAlbums/<?php echo $row['id_user']?>"> Альбомы </a>
+            <a href="<?php echo SITE_NAME?>index.php/user/home_page/<?php echo $row['id_user']?>">Профиль</a>
+            <a href="<?php echo SITE_NAME?>index.php/album/getAlbums/<?php echo $row['id_user']?>"> Альбомы </a>
         <li>Страница : <?php echo $row['id_user']?></li> <br>
         <li>Имя : <?php echo $row['name']?></li> <br>
         <li>Емайл : <?php echo $row['email']?></li> <br>

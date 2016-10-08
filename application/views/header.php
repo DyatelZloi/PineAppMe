@@ -22,11 +22,11 @@
                         </label>
                         <input type="submit" value="Войти">
                     </form>
-                    <a href="http://pineappme:81/index.php/user/registration"> Зарегестрироваться </a>
+                    <a href="<?php echo SITE_NAME?>index.php/user/registration"> Зарегестрироваться </a>
                 </section>
             <?php endif; ?>
             <br>
-            <a href="http://pineappme:81/index.php/image/"> На главную</a>
+            <a href="<?php echo SITE_NAME?>index.php/image/"> На главную</a>
             <?php if ($this->session->userdata('id_user') != null) :?>
                 <!-- Прошлый вариант выхода, теперь используем ссылку, котороя редиректит
                 <?php echo form_open('user/logout/') ?>
@@ -34,15 +34,15 @@
                     <input type="submit" value="Выйти">
                 </form>
                 -->
-                <a href="http://pineappme:81/index.php/user/logout/1">Выйти</a>
+                <a href="<?php echo SITE_NAME?>index.php/user/logout/1">Выйти</a>
                 <br>
-                <a href="http://pineappme:81/index.php/user/home_page/<?php echo $this->session->userdata('id_user') ?>">Профиль</a>
+                <a href="<?php echo SITE_NAME?>index.php/user/home_page/<?php echo $this->session->userdata('id_user') ?>">Профиль</a>
                 <br>
             <?php endif; ?>
             <br>
-            <a href="http://pineappme:81/index.php/image/getPopular"> Популярные </a>
-            <a href="http://pineappme:81/index.php/image/getFavourite"> Интересные </a>
-            <a href="http://pineappme:81/index.php/user/getAllUsers"> Люди</a>
+            <a href="<?php echo SITE_NAME?>index.php/image/getPopular"> Популярные </a>
+            <a href="<?php echo SITE_NAME?>index.php/image/getFavourite"> Интересные </a>
+            <a href="<?php echo SITE_NAME?>index.php/user/getAllUsers"> Люди</a>
         <?php
                 if (!empty($_SERVER['HTTP_CLIENT_IP'])){
                     $ip = $_SERVER['HTTP_CLIENT_IP'];

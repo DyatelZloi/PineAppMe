@@ -54,7 +54,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-4">
                             <div class="top-logo-wrapper">
-                                <a href="http://pineappme:81/index.php" class="header__logo-link">Pineappme</a>
+                                <a href="<?php echo SITE_NAME?>index.php" class="header__logo-link">Iananas</a>
                                 <a href="#" class="logo__subscribers">подписки</a>
                             </div>
                         </div>
@@ -105,11 +105,11 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-8">
                         <ul class="profile_menu">
-                            <li><a href="#">фотографии<br><span>48</span></a></li>
-                            <li><a href="#">альбомы<br><span>2</span></a></li>
-                            <li><a href="http://pineappme:81/index.php/subscription/getAllSubcribers/<?php echo $row['id_user'] ?>">подписчики<br><span>240</span></a></li>
-                            <li><a href="#">подписки<br><span>12</span></a></li>
-                            <li><a href="#">номинации<br><span>1</span></a></li>
+                            <li><a href="#">фотографии<br><span><?php foreach($img_count->result_array() as $kk){ echo $kk['count'];} ?></span></a></li>
+                            <li><a href="#">альбомы<br><span><?php foreach($albums->result_array() as $kk){ echo $kk['count'];} ?></span></a></li>
+                            <li><a href="<?php echo SITE_NAME?>index.php/subscription/getAllSubcribers/<?php echo $row['id_user'] ?>">подписчики<br><span><?php foreach($sub_count->result_array() as $kk){ echo $kk['count'];} ?></span></a></li>
+                            <li><a href="#">подписки<br><span><?php foreach($u_sub->result_array() as $kk){ echo $kk['count'];} ?></span></a></li>
+                            <li><a href="#">номинации<br><span>0</span></a></li>
                         </ul>
                     </div>
                     <div class="col-xs-12 col-sm-4">
