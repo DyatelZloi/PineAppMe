@@ -242,6 +242,19 @@
 	.top_header_menu .fa-envelope:after {
 		padding-left: 0px;
 	}
+	.dialogues_wrapper {
+		display: none;
+	}
+	.form_photo_button {
+		display: block;
+		margin-bottom: 20px;
+	}
+	.nominations_items:after {
+		display: none;
+	}
+	.nominations .container .col-xs-12 {
+		text-align: center;
+	}
 }
 
 /* Extra Small Devices, Phones */ 
@@ -286,6 +299,48 @@
 	.str_photo_prev i, .str_photo_next i {
 		top:35%;
 	}
+	.nominations_item {
+		font-size: 25px;
+		width: 320px;
+	}
+	.konkurs_rules_item {
+		margin-bottom: 30px;
+	}
+	.prizes_head {
+		text-align: center;
+	}
+	.prizes_left_item {
+		float: none;
+	}
+	.prizes_right_item {
+		float: none;
+		text-align: center;
+	}
+	.prizes_s {
+		padding: 40px 0;
+	}
+	.prizes_item {
+		margin-bottom: 10px;
+	}
+	.form_photo_name {
+		float: none;
+		width: 100%;
+	}
+	.jq-selectbox {
+		margin-left: 0;
+		width: 100%;
+		margin-bottom: 25px;
+	}
+	.form_photo_button {
+		padding: 0px 16px;
+		font-size: 16px;
+	}
+	.add_photo_s {
+		padding: 60px 0 80px;
+	}
+	.form_photo_short_descr {
+		margin-bottom: 25px;
+	}
 }
 
 /* Custom, iPhone Retina */ 
@@ -298,5 +353,17 @@
 	}
 	.str_photo_prev i, .str_photo_next i {
 		top:30%;
+	}
+	.nominations_item {
+		width: 310px;
+	}
+	.form_photo_short_descr, .form_photo_name {
+		font-size: 17px;
+	}
+	.jq-selectbox__select {
+		font: 17px/32px Open Sans, sans-serif;
+	}
+	.add_photo_form {
+		padding: 32px;
 	}
 }

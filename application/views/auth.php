@@ -1,26 +1,117 @@
-<?php
-$ses = $this->session->all_userdata();
-foreach($ses as $data){
-    echo "$data".'<br>';
-}
-?>
-<?php echo validation_errors(); ?>
-<section>
-    <script src="//ulogin.ru/js/ulogin.js"></script>
-    <div id="uLogin" data-ulogin="display=small;theme=classic;fields=first_name,email;providers=facebook,vkontakte,twitter,googleplus;redirect_uri=http%3A%2F%2Fpineappme%3A81%2Findex.php%2Fuser%2FloginFromULogin;mobilebuttons=0;"></div>
-    <?php echo form_open('user/login/') ?>
-        <label>
-            E-mail: <input type="text" name="email"><br>
-        </label>
-        <label>
-            Пароль: <input type="password" name="password"><br>
-        </label>
-        <input type="submit" value="Войти">
-    </form>
+<!DOCTYPE html>
+<html lang="ru" class="reg_html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- адаптация под телефоны -->
+    <meta name="description" content="Pineappme"> <!-- описание страницы (записывать в content="сюда") -->
+    <meta name="keywords" content="Pineappme"> <!-- теги (записывать в content="сюда") -->
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/media.css">
+    <link rel="stylesheet" href="/../../css/css.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&subset=cyrillic" rel="stylesheet">
+
+    <title>Регистрация - Iananas</title> <!-- Название страницы отображаемое в окне браузера сверху -->
+
+    <script>
+        // Кнопка "Далее" будет неактивна, пока не будет введен Email.
+        function checkParams() {
+            var email = $('#reg_email').val();
+
+            if(email.length != 0) {
+                $('#reg_submit').removeAttr('disabled');
+            } else {
+                $('#reg_submit').attr('disabled', 'disabled');
+            }
+        }
+    </script>
+</head>
+
+<body class="registration_document">
+
+<section class="registration">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 class="hello">Добро пожаловать!</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="logo_dots">
+                    <i class="fa fa-circle" aria-hidden="true"></i>
+                    <i class="fa fa-circle" aria-hidden="true"></i>
+                    <i class="fa fa-circle" aria-hidden="true"></i>
+                    <i class="fa fa-circle" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <p class="enter_site">
+                    Используй аккаунт в социальных сетях
+                </p>
+            </div>
+        </div>
+        <script src="//ulogin.ru/js/ulogin.js"></script>
+        <div class="row" id="uLogin" data-ulogin="display=buttons;fields=first_name,email;redirect_uri=http%3A%2F%2Fpineappme%3A81%2Findex.php%2Fuser%2FloginFromULogin;">
+            <ul class="social_enter" >
+                <li ><a data-uloginbutton="facebook" class="fb_soc" ><img src="../../img/fb_icon_reg.png" alt="facebook"></a></li>
+                <li ><a data-uloginbutton="vkontakte" class="vk_soc" ><img src="../../img/vk_icon_reg.png" alt="vk"></a></li>
+                <li ><a data-uloginbutton="twitter" class="tw_soc" ><img src="../../img/tw_icon_reg.png" alt="twitter"></a></li>
+                <li  ><a data-uloginbutton="googleplus" class="go_soc"><img src="../../img/go_icon_reg.png" alt="google plus"></a></li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="email_wrap">
+                <p class="email_enter">или используй свой адрес эл. почты</p>
+                <?php echo form_open('user/login/', array('class' => "reg_form")) ?>
+                <input id="reg_email" type="email" placeholder="Адрес эл. почты" name="email" value="<?php echo set_value('email'); ?>">
+                <input  type="password" placeholder="Пароль" name="password" value="<?php echo set_value('password'); ?>">
+                <button id="reg_submit">Далее</button>
+                </form>
+                <p class="rules">
+                    Создавая аккаунт, ты подтверждаешь что прочитал и принял<br>
+                    <a class="rules_link" href="#">Правила сервиса</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="line_background fixed-bot"></div>
 </section>
-<br>
-<a href="<?php echo SITE_NAME?>index.php/image/"> На главную</a>
-<br>
-<?php echo form_open('user/logout/') ?>
-<input type="submit" value="Выйти">
-</form>
+<script src="../../js/flipclock.min.js"></script>
+<script src="../../js/common.js"></script>
+</body>
+
+</html>
+<!--
+    <?php
+    $ses = $this->session->all_userdata();
+    foreach($ses as $data){
+        echo "$data".'<br>';
+    }
+    ?>
+    <?php echo validation_errors(); ?>
+    <section>
+        <script src="//ulogin.ru/js/ulogin.js"></script>
+        <div id="uLogin" data-ulogin="display=small;theme=classic;fields=first_name,email;providers=facebook,vkontakte,twitter,googleplus;redirect_uri=http%3A%2F%2Fpineappme%3A81%2Findex.php%2Fuser%2FloginFromULogin;mobilebuttons=0;"></div>
+        <?php echo form_open('user/login/') ?>
+            <label>
+                E-mail: <input type="text" name="email"><br>
+            </label>
+            <label>
+                Пароль: <input type="password" name="password"><br>
+            </label>
+            <input type="submit" value="Войти">
+        </form>
+    </section>
+    <br>
+    <a href="<?php echo SITE_NAME?>index.php/image/"> На главную</a>
+    <br>
+    <?php echo form_open('user/logout/') ?>
+    <input type="submit" value="Выйти">
+    </form>
+-->

@@ -47,6 +47,8 @@
 </ul>
 -->
 <?php foreach ($object->result_array() as $row): ?>
+    <div style="display: none" id=""> <?php echo $row['id_user'] ?> </div>
+    <input type="hidden" id="tUser" value="<?php echo $row['id_user'] ?>">
     <header class="header_profile_page">
         <div class="container">
             <div class="photos_profile_page_bg">
@@ -60,6 +62,7 @@
                         </div>
                         <div class="col-xs-12 col-md-8 col-lg-6 col-sm-8 col-lg-offset-2">
                             <?php if($this->session->userdata('id_user') == $row['id_user']) :?>
+
                             <div class="communication">
                                 <ul class="top_header_menu">
                                     <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
@@ -67,7 +70,13 @@
                                     <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a></li>
                                     <li><a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a></li>
                                     <li>
-                                        <a href="#"><img class="img-radius" src="/../../img/mini/<?php echo $row['path'] ?>" alt="photo">
+                                        <a id="userImage" class="img-a" href="<?php echo SITE_NAME?>index.php/user/home_page/<?php echo $this->session->userdata('id_user') ?>">
+                                            <?php if($this->session->userdata('path') != null): ?>
+                                                <img class="img-radius" src="/../../img/mini/<?php echo $this->session->userdata('path') ?>">
+                                            <?php endif; ?>
+                                            <?php if($this->session->userdata('path') == null):?>
+                                                <img class="img-radius" src="/../../img/add-image-big.jpg">
+                                            <?php endif; ?>
                                         </a>
                                     </li>
                                 </ul>
@@ -81,8 +90,14 @@
                         <div class="row">
                             <div class="col-xs-12 col-md-7">
                                 <div class="profile_photos">
-                                    <img class="large_photo" src="/../../img/mini/<?php echo $row['path'] ?>" alt="Avatar">
-                                    <img class="mini_photo" src="img/profile_photo_2.jpg" alt="Avatar">
+                                    <?php if($row['path'] != null) :?>
+                                        <img class="large_photo" src="/../../img/mini/<?php echo $row['path'] ?>" alt="Avatar">
+                                        <img class="mini_photo" src="/../../img/add-image-big.jpg" alt="Avatar">
+                                    <?php endif; ?>
+                                    <?php if($row['path'] == null) :?>
+                                        <img class="large_photo" src="/../../img/add-image-big.jpg" alt="Avatar">
+                                        <img class="mini_photo" src="/../../img/add-image-big.jpg" alt="Avatar">
+                                    <?php endif; ?>
                                 </div>
                                 <div class="profile_name_description_wrap clearfix">
                                     <h2 class="profile_name"><?php echo $row['name']?></h2>
@@ -105,19 +120,25 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-8">
                         <ul class="profile_menu">
-                            <li><a href="#">фотографии<br><span><?php foreach($img_count->result_array() as $kk){ echo $kk['count'];} ?></span></a></li>
+                            <li><a href="<?php echo SITE_NAME?>index.php/user/home_page/<?php echo $row['id_user'] ?>">фотографии<br><span><?php foreach($img_count->result_array() as $kk){ echo $kk['count'];} ?></span></a></li>
                             <li><a href="#">альбомы<br><span><?php foreach($albums->result_array() as $kk){ echo $kk['count'];} ?></span></a></li>
                             <li><a href="<?php echo SITE_NAME?>index.php/subscription/getAllSubcribers/<?php echo $row['id_user'] ?>">подписчики<br><span><?php foreach($sub_count->result_array() as $kk){ echo $kk['count'];} ?></span></a></li>
-                            <li><a href="#">подписки<br><span><?php foreach($u_sub->result_array() as $kk){ echo $kk['count'];} ?></span></a></li>
+                            <li><a href="<?php echo SITE_NAME?>index.php/subscription/getAllSubscription/<?php echo $row['id_user'] ?>">подписки<br><span><?php foreach($u_sub->result_array() as $kk){ echo $kk['count'];} ?></span></a></li>
                             <li><a href="#">номинации<br><span>0</span></a></li>
                         </ul>
                     </div>
                     <div class="col-xs-12 col-sm-4">
                         <ul class="profile_action clearfix">
                             <?php if($this->session->userdata('id_user') != $row['id_user']) :?>
-                                <li><a href="#">Отписаться<i class="fa fa-times" aria-hidden="true"></i></a></li>
+                                <li id="sub"><a href="#">Отписаться<i class="fa fa-times" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a></li>
                             <?php endif; ?>
+                            <!--
+                                 Сейчас немного страшно. Можно написать проверку на javascript подписан или нет, или же выбирать всех
+                                 подписчиков, а потом просматривать если у нас такой, возможно выбирать с условием есть ли именно этот
+                                 дальше опять же с помощью аджакса подписываемся и отписываемся. Интересно, чего он тут забыл каждый день
+                                 кататься. Какой вариант лучше? Хороший вопрос.
+                             -->
                             <li>
                                 <a class="dots" href="#">
                                     <i class="fa fa-circle" aria-hidden="true"></i>
@@ -167,5 +188,66 @@
         </div>
     </div>
 </section>
-<script src="js/common.js"></script>
+<script src="/../../js/common.js"></script>
+<script>
+    window.onload = function (){
+        Cheked(<?php echo "'".$row['id_user']."'" ?>);
+    };
 
+    //Проверяем подписаны ли мы на этого человека. Также нужно будет подумать о проверки подписки на группу людей. Ахх, чёт сложно.
+    function Cheked(id_user){
+        var sub = document.getElementById('sub');
+        var iUser = id_user;
+        console.log(iUser);
+        var tUser = document.getElementById('tUser').value;
+        console.log(tUser);
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
+            if (xhttp.readyState==4 && xhttp.status == 200) {
+                var jsonText = xhttp.responseText;
+                sub.innerHTML = jsonText;
+                console.log(jsonText);
+            }
+        };
+        xhttp.open("get", "<?php echo SITE_NAME?>index.php/Subscription/chekSub?id_user="+tUser+"&id_sub="+iUser);
+        xhttp.send();
+    }
+
+    //Подписываемся на пользователя
+    function sub(id_user){
+        var sub = document.getElementById('sub');
+        var iUser = id_user;
+        console.log(iUser);
+        var tUser = document.getElementById('tUser').value;
+        console.log(tUser);
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState == 4 && xhttp.status == 200){
+                var jsonText = xhttp.responseText;
+                sub.innerHTML = jsonText;
+                console.log(jsonText);
+            }
+        };
+        xhttp.open("GET", "<?php echo SITE_NAME ?>index.php/subscription/subscribeAjax?id_user="+tUser+"&id_sub="+iUser);
+        xhttp.send();
+    }
+
+    //Отписываемя от пользователя
+    function unsub(id_user){
+        var sub = document.getElementById('sub');
+        var iUser = id_user;
+        console.log(iUser);
+        var tUser = document.getElementById('tUser').value;
+        console.log(tUser);
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState == 4 && xhttp.status == 200){
+                var jsonText = xhttp.responseText;
+                sub.innerHTML = jsonText;
+                console.log(jsonText);
+            }
+        };
+        xhttp.open("GET", "<?php echo SITE_NAME ?>index.php/subscription/unsubscribeAjax?id_user="+tUser+"&id_sub="+iUser);
+        xhttp.send();
+    }
+</script>

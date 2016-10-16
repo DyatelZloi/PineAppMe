@@ -38,7 +38,7 @@ class User extends CI_Controller{
                     );
                     $this->session->set_userdata($newdata);
             }
-            redirect('http://pineappme:81/index.php/', 'refresh');
+            redirect(SITE_NAME.'index.php/', 'refresh');
         }
     }
 
@@ -70,7 +70,7 @@ class User extends CI_Controller{
                     $newdata['logged_in'] = TRUE;
                 }
                 $this->session->set_userdata($newdata);
-                redirect('http://pineappme:81/index.php/', 'refresh');
+                redirect(SITE_NAME.'index.php/', 'refresh');
             } else {
                 $sql = "SELECT * FROM `users` WHERE users.email = (".$this->db->escape($email).")";
                 $object = $this->db->query($sql);
@@ -83,7 +83,7 @@ class User extends CI_Controller{
                 $this->session->set_userdata($newdata);
             }
         }
-        redirect('http://pineappme:81/index.php/', 'refresh');
+        redirect(SITE_NAME.'index.php/', 'refresh');
     }
 
     //Функция логина с редиректом
@@ -109,7 +109,7 @@ class User extends CI_Controller{
                 );
                 $this->session->set_userdata($newdata);
             }
-            redirect('http://pineappme:81/index.php/', 'refresh');
+            redirect(SITE_NAME.'index.php/', 'refresh');
         }
     }
 
@@ -120,9 +120,7 @@ class User extends CI_Controller{
         $this->form_validation->set_rules('email', 'Email адрес', 'required|valid_email|is_unique[users.email]');
         $this->form_validation->set_rules('password', 'Пароль', 'required');
         if ($this->form_validation->run() == FALSE) {
-
             $this->load->view('registration');
-
         }
         else {
             $id_user = $this->input->post('id_user');
@@ -146,7 +144,7 @@ class User extends CI_Controller{
         $this->session->unset_userdata('id_user');
         $this->session->unset_userdata('path');
         $this->session->unset_userdata('name');
-        if ($log != null) redirect('http://pineappme:81/index.php/', 'refresh');
+        if ($log != null) redirect(SITE_NAME.'index.php/', 'refresh');
 
     }
 
@@ -170,7 +168,6 @@ class User extends CI_Controller{
             $object['email'] = $row['email'];
             $object['password'] = $row['password'];
             $object['name'] = $row['name'];
-
         }
         return $object;
     }
@@ -199,8 +196,7 @@ class User extends CI_Controller{
             $this->load->view('header');
             $this->load->view('user_edit', array('data' => $this->db->query($user_data)));
             $this->load->view('footer');
-        }
-        else {
+        } else {
             $id_user = $this->input->post('id_user');
             $name = $this->input->post('name');
             $email = $this->input->post('email');
@@ -312,7 +308,7 @@ class User extends CI_Controller{
         if($this->session->userdata('id_user')){
             if (!empty($_SERVER['HTTP_CLIENT_IP'])){
                 $ip = $_SERVER['HTTP_CLIENT_IP'];
-            }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+            } else if(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
                 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
             } else {
                 $ip = $_SERVER['REMOTE_ADDR'];

@@ -3,8 +3,6 @@ class Image extends CI_Controller{
 
     //TODO заменить post на get_post, пример : $this->input->get_post('id_image', TRUE)
     //TODO проверки, кучу проверок.
-    //TODO дата добавления картинки
-    //TODO заменить echo на посмотри документацию
     public function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
@@ -13,9 +11,15 @@ class Image extends CI_Controller{
     //Получаем все картинки
     public function index(){
         $sql = "SELECT * FROM `images`";
-        $images_data = array('images_data' => $query = $this->db->query($sql));
+        $images_data = $query = $this->db->query($sql);
+        $sql = "SELECT * FROM `images` ORDER BY views DESC";
+        $images_data2 = $query = $this->db->query($sql);
+        $sql = "SELECT * FROM `images` ORDER BY images.likes DESC";
+        $images_data3 = $query = $this->db->query($sql);
+        $sql = "SELECT * FROM `users` LEFT OUTER JOIN `images` USING (id_image)";
+        $object = $this->db->query($sql);
         $this->load->view('indexHeader', array('title' => 'Все картинки'));
-        $this->load->view('index',$images_data);
+        $this->load->view('index',array('images_data' => $images_data, 'images_data2' => $images_data2, 'images_data3' => $images_data3, 'object' => $object));
         $this->load->view('indexFooter');
     }
 
@@ -412,9 +416,27 @@ id_image<".$this->db->escape($id_image)." ORDER by id_image DESC LIMIT 0,1) t2";
                 $this->load->view('header', array('title' => 'Картинка загружена'));
                 $this->load->view('upload_success', $data);
                 $this->load->view('footer');
-
             }
         }
     }
 
+    //По идее мы должны выбрать информацию о картинке
+    //Делаем репост
+    public function repostImage(){
+        if($this->input->post('id') && $this->session->userdata('id_user') != null){
+            $sql = "SELECT * FROM images WHERE id_image = ".$this->db->escape($this->input->post('id'));
+            $image = $this->db->query($sql);
+            $image_data = array();
+            foreach($image->result_array() as $row){
+                $image_data['id_user'] = $row['id_user'];
+                $image_data['path'] = $row['path'];
+            }
+            $sql = "INSERT INTO `images`(`id_user`, `path`, `is_repost`,`id_user_rep`) VALUES (".
+                   $this->db->escape($image_data['id_user']).", ".$this->db->escape($image_data['path']).", ".
+                   $this->db->escape('TRUE').", ".$this->db->escape($this->session->userdata('id_user')).")";
+            $this->db->query($sql);
+        }
+    }
+
+    //Если что я немного занимался ананасом и немного занимался закупом
 }

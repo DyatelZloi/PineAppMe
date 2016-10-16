@@ -6,7 +6,7 @@
                     <div class="top-logo-wrapper">
                         <a href="<?php echo SITE_NAME?>index.php" class="header__logo-link">Iananas</a>
                         <?php if($this->session->userdata('id_user') != null):?>
-                            <a href="#" class="logo__subscribers">подписки</a>
+                            <a href="<?php echo SITE_NAME?>index.php/subscription/getAllSubcribers/<?php echo $this->session->userdata('id_user') ?>" class="logo__subscribers">подписки</a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -20,7 +20,12 @@
                                 <li><a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a></li>
                                 <li>
                                     <a  id="userImage" class="img-a" href="<?php echo SITE_NAME?>index.php/user/home_page/<?php echo $this->session->userdata('id_user') ?>">
-                                        <img class="img-radius" src="/../../img/mini/<?php echo $this->session->userdata('path') ?>">
+                                        <?php if($this->session->userdata('path') != null): ?>
+                                            <img class="img-radius" src="/../../img/mini/<?php echo $this->session->userdata('path') ?>">
+                                        <?php endif; ?>
+                                        <?php if($this->session->userdata('path') == null):?>
+                                            <img class="img-radius" src="/../../img/add-image-big.jpg">
+                                        <?php endif; ?>
                                     </a>
                                 </li>
                             </ul>
@@ -124,48 +129,39 @@
                             <a href="<?php echo SITE_NAME?>index.php/Image/getById/<?php echo $row['id_image']?>" ><img src="<?php echo '/../../img/mini/'.$row['path']; ?>" alt="Image"></a>
                         <?php endforeach; ?>
                     </div>
-                    <!--
                     <div class="tab_item">
-                        <img src="img/photos_1.jpg" alt="Image">
-                        <img src="img/photos_2.jpg" alt="Image">
-                        <img src="img/photos_3.jpg" alt="Image">
-                        <img src="img/photos_4.jpg" alt="Image">
-                        <img src="img/photos_5.jpg" alt="Image">
-                        <img src="img/photos_6.jpg" alt="Image">
-                        <img src="img/photos_7.jpg" alt="Image">
-                        <img src="img/photos_8.jpg" alt="Image">
+                        <?php foreach ($images_data2->result_array() as $row): ?>
+                            <a href="<?php echo SITE_NAME?>index.php/Image/getById/<?php echo $row['id_image']?>" ><img src="<?php echo '/../../img/mini/'.$row['path']; ?>" alt="Image"></a>
+                        <?php endforeach; ?>
                     </div>
                     <div class="tab_item">
-                        <img src="img/photos_1.jpg" alt="Image">
-                        <img src="img/photos_2.jpg" alt="Image">
-                        <img src="img/photos_3.jpg" alt="Image">
-                        <img src="img/photos_4.jpg" alt="Image">
-                        <img src="img/photos_5.jpg" alt="Image">
-                        <img src="img/photos_6.jpg" alt="Image">
-                        <img src="img/photos_7.jpg" alt="Image">
-                        <img src="img/photos_8.jpg" alt="Image">
+                        <?php foreach ($images_data3->result_array() as $row): ?>
+                            <a href="<?php echo SITE_NAME?>index.php/Image/getById/<?php echo $row['id_image']?>" ><img src="<?php echo '/../../img/mini/'.$row['path']; ?>" alt="Image"></a>
+                        <?php endforeach; ?>
                     </div>
                     <div class="tab_item">
-                        <img src="img/photos_1.jpg" alt="Image">
-                        <img src="img/photos_2.jpg" alt="Image">
-                        <img src="img/photos_3.jpg" alt="Image">
-                        <img src="img/photos_4.jpg" alt="Image">
-                        <img src="img/photos_5.jpg" alt="Image">
-                        <img src="img/photos_6.jpg" alt="Image">
-                        <img src="img/photos_7.jpg" alt="Image">
-                        <img src="img/photos_8.jpg" alt="Image">
+
                     </div>
                     <div class="tab_item">
-                        <img src="img/photos_1.jpg" alt="Image">
-                        <img src="img/photos_2.jpg" alt="Image">
-                        <img src="img/photos_3.jpg" alt="Image">
-                        <img src="img/photos_4.jpg" alt="Image">
-                        <img src="img/photos_5.jpg" alt="Image">
-                        <img src="img/photos_6.jpg" alt="Image">
-                        <img src="img/photos_7.jpg" alt="Image">
-                        <img src="img/photos_8.jpg" alt="Image">
+                        <?php foreach($object->result_array() as $rowNot) :?>
+                            <div class="col-xs-12 col-sm-4 col-md-4 ">
+                                <div class="sub_item margin-bot">
+                                    <div class="sub_avatar">
+                                        <?php if($rowNot['path'] != null) :?>
+                                            <img src="/../../img/mini/<?php echo $rowNot['path']?>" alt="subscribers avatar">
+                                        <?php endif; ?>
+                                        <?php if ($rowNot['path'] == null):?>
+                                            <img src="/../../img/add-image-big.jpg">
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="sub_name"><?php echo $rowNot['name']?></div>
+                                    <a href="<?php echo SITE_NAME ?>index.php/User/home_page/<?php echo $rowNot['id_user']?>" class="sub_button">Просмотреть профиль</a>
+                                </div>
+                                <br><br>
+                            </div>
+
+                        <?php endforeach; ?>
                     </div>
-                    -->
                 </div>
             </div>
         </div>

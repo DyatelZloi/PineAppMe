@@ -43,3 +43,18 @@
 .fixed-bot{
     position: fixed;
 }
+
+.margin-bot{
+    margin-bottom: 10px;
+}
+
+.sub-sub{
+    color: #fff;
+    font-size: 12px;
+    height: 31px;
+    display: inline-block;
+    padding: 6px 16px;
+    background-color: #00BEFC;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
