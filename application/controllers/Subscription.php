@@ -42,37 +42,29 @@ class Subscription extends CI_Controller{
             $sql = "DELETE FROM `subscribers` WHERE id_subscriber ="
                    .(string)$this->db->escape($id_subscriber).
                    " AND id_user =".(string)$this->db->escape($id_user);
-            $query = $this->db->query($sql);
-            $this->load->view('header');
-            $this->load->view('unsubscribe_success');
-            $this->load->view('footer');
+            $this->db->query($sql);
         } else echo 'Не ввели данные';
     }
-
-    //Нужно сделать проверку подписаны мы или нет.
 
     //Мы можем возвращать html код, чтобы его потом не парсить, а просто выводить в нужном месте
     //Подписка Ajax
     public function subscribeAjax(){
-        $id_subscriber1 = $this->input->get('id_sub');
-        $id_user1 = $this->input->get('id_user');
-        $sql = "INSERT INTO `subscribers` (id_user, id_subscriber) VALUES(".(string)$this->db->escape($id_user1).","
-               .(string)$this->db->escape($id_subscriber1).")";
-        $this->db->query($sql);
-        echo '<a href="#" onclick=""> Подписаться<i class="fa fa-plus" aria-hidden="true"></i></a>';
+        $sql = "INSERT INTO `subscribers` (id_user, id_subscriber) VALUES(".$this->db->escape((string)$this->input->get('id_user')).", "
+               .$this->db->escape((string)$this->input->get('id_sub')).")";
+        if($this->db->query($sql) == true) {
+            echo '<a href="#" onclick="unsub(' . "'" . $this->session->userdata('id_user') . "'" . ')">Отписаться<i class="fa fa-times" aria-hidden="true"></i></a>';
+        }
     }
 
     //Мы можем возвращать html код, чтобы его потом не парсить, а просто выводить в нужном месте
     //Отписка Ajax
     public function unsubscribeAjax(){
-        $id_subscriber1 = $this->input->get('id_sub');
-        $id_user1 = $this->input->get('id_user');
-        $sql = "DELETE FROM `subscribers` WHERE id_subscriber =".(string)$this->db->escape($id_subscriber1).
-               " AND id_user =".(string)$this->db->escape($id_user1);
-        $this->db->query($sql);
-        echo '<a href="#" onclick=""> Подписаться<i class="fa fa-plus" aria-hidden="true"></i></a>';
+        $sql = "DELETE FROM `subscribers` WHERE id_subscriber = ".$this->db->escape((string)$this->input->get('id_sub')).
+               " AND id_user = ".$this->db->escape((string)$this->input->get('id_user'));
+        if($this->db->query($sql) == true){
+            echo '<a href="#" onclick="sub('."'".$this->session->userdata('id_user')."'".')"> Подписаться<i class="fa fa-plus" aria-hidden="true"></i></a>';
+        }
     }
-
 
     // Получаем всех подписавшихся с помощью аджакса
     public function getAllSubcribersAjax(){
@@ -88,19 +80,18 @@ class Subscription extends CI_Controller{
         echo json_encode($allSubscribers);
     }
 
+    //TODO подумать. Он выполняется даже если нет никаких записей в бд. Возвращает при этом пустые строки. Можно просто выводить подписаться, а если что-то есть, отписываемя.
     //Отлично, оно проверяет подписаны или нет.
     public function chekSub(){
-        $sql = "SELECT * FROM subscribers WHERE subscribers.id_subscriber = ".(string)$this->db->escape($this->input->get('id_sub')).
+        $sql = "SELECT COUNT(*) AS `count` FROM subscribers WHERE subscribers.id_subscriber = ".(string)$this->db->escape($this->input->get('id_sub')).
                " AND subscribers.id_user = ".(string)$this->db->escape($this->input->get('id_user'));
-        $query = $this->db->query($sql);
-        $result = array();
-        foreach($query->result_array() as $row){
-            @$result['id_subscribe'] = @$row['id_subscribe'];
-        }
-        if (@$result['id_subscribe'] == null){
-            echo '<a href="#" onclick="sub()"> Подписаться<i class="fa fa-plus" aria-hidden="true"></i></a>';
-        } else {
-            echo '<a href="#" onclick="unsub()">Отписаться<i class="fa fa-times" aria-hidden="true"></i></a>';
+        $object = $this->db->query($sql);
+        foreach($object->result_array() as $row){
+            if ($row['count'] != '0'){
+                echo '<a href="#" onclick="unsub('."'".$this->session->userdata('id_user')."'".')">Отписаться<i class="fa fa-times" aria-hidden="true"></i></a>';
+            } else if ($row['count'] == '0') {
+                echo '<a href="#" onclick="sub('."'".$this->session->userdata('id_user')."'".')"> Подписаться<i class="fa fa-plus" aria-hidden="true"></i></a>';
+            }
         }
     }
 
@@ -118,18 +109,18 @@ class Subscription extends CI_Controller{
         }
         if($id_user != null){
             $sql = "SELECT * FROM `users` LEFT OUTER JOIN `images` USING (id_image) WHERE users.id_user = ".(string)$this->db->escape($id_user);
-            $object = $query = $this->db->query($sql);
+            $object = $this->db->query($sql);
             $sql = "SELECT * FROM images WHERE id_user =".(string)$this->db->escape($id_user);
-            $images = $query = $this->db->query($sql);
+            $images = $this->db->query($sql);
             $sql = "SELECT COUNT(*) AS count FROM images WHERE images.id_user = ".(string)$this->db->escape($id_user);
-            $images_count = $query = $this->db->query($sql);
+            $images_count =  $this->db->query($sql);
             $sql = "SELECT COUNT(*) AS count FROM subscribers WHERE id_user = ".(string)$this->db->escape($id_user);
             $sub_count = $query = $this->db->query($sql);
             $sql = "SELECT COUNT(*) AS count FROM subscribers WHERE id_subscriber = ".(string)$this->db->escape($id_user);
-            $u_sub = $query = $this->db->query($sql);
+            $u_sub =  $this->db->query($sql);
             $sql = "SELECT COUNT(*) AS count FROM albums WHERE id_user = ".(string)$this->db->escape($id_user);
-            $albums = $query = $this->db->query($sql);
-            $sql = "SELECT * FROM subscribers JOIN users LEFT OUTER JOIN images USING (id_image) WHERE subscribers.id_user =".(string)$this->db->escape($id_user).
+            $albums =  $this->db->query($sql);
+            $sql = "SELECT path, users.id_user, name FROM subscribers JOIN users LEFT OUTER JOIN images USING (id_image) WHERE subscribers.id_user =".(string)$this->db->escape($id_user).
                    " AND users.id_user = subscribers.id_subscriber";
             $query = $this->db->query($sql);
             $this->load->view('subscribe', array('query' => $query, 'object' => $object, 'images' => $images, 'img_count' => $images_count, 'sub_count' => $sub_count, 'u_sub' => $u_sub, 'albums' => $albums));
@@ -160,7 +151,7 @@ class Subscription extends CI_Controller{
             $u_sub = $query = $this->db->query($sql);
             $sql = "SELECT COUNT(*) AS count FROM albums WHERE id_user = ".(string)$this->db->escape($id_user);
             $albums = $query = $this->db->query($sql);
-            $sql = "SELECT * FROM subscribers JOIN users WHERE subscribers.id_subscriber =".(string)$this->db->escape($id_user).
+            $sql = "SELECT path, users.id_user, name FROM subscribers JOIN users LEFT OUTER JOIN images USING (id_image) WHERE subscribers.id_subscriber =".(string)$this->db->escape($id_user).
                    "AND users.id_user = subscribers.id_user";
             $query = $this->db->query($sql);
             $this->load->view('subscription', array('query' => $query, 'object' => $object, 'images' => $images, 'img_count' => $images_count, 'sub_count' => $sub_count, 'u_sub' => $u_sub, 'albums' => $albums));
@@ -186,7 +177,6 @@ class Subscription extends CI_Controller{
                     .(string)$this->db->escape($id_user).
                     "AND users.id_user = subscribers.id_user AND like.like_data > subscribers.data ORDER BY like.id_like DESC";
             //Запрос для получения репостов, но т.к. самих репостов пока нет, нету и запроса. Он тоже будет тяжёлым D.
-
             $query2 = $this->db->query($sql2);
             //$sql3 = "";
             $this->load->view('header', array('title' => 'Подписки'));
@@ -194,9 +184,5 @@ class Subscription extends CI_Controller{
             $this->load->view('footer');
         } else echo 'Залогиньтесь';
     }
-
-    //Довольно сложно можно для начала разбить на 3 подвида, а затем уже как-то объеденять их.
-    //Да и юзерам будет немного удобней смотреть что-то отдельное т.к. не будет каши в голове.
-    //Правда заказчики могут не одобрить
-    //Также рассмотрим вариант array_merge() в файле написана подсказка
 }
+

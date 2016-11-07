@@ -234,11 +234,10 @@ class User extends CI_Controller{
             $object = $query = $this->db->query($sql);
             $sql = "SELECT * FROM images WHERE id_user =".(string)$this->db->escape($id_user);
             $images = $query = $this->db->query($sql);
-            $this->load->view('indexHeader', array('title' => 'Профиль'));
             $this->load->view('user', array('object' => $object, 'images' => $images));
             $this->load->view('indexFooter');
         } else if ($id_user != null) {
-            $sql = "SELECT * FROM `users` LEFT OUTER JOIN `images` USING (id_image) WHERE users.id_user = ".(string)$this->db->escape($id_user);
+            $sql = "SELECT id_image, users.id_user, name, email, about, sity, birthday, role, password, ip_user, background, path FROM `users` LEFT OUTER JOIN `images` USING (id_image) WHERE users.id_user = ".(string)$this->db->escape($id_user);
             $object = $query = $this->db->query($sql);
             $sql = "SELECT * FROM images WHERE id_user =".(string)$this->db->escape($id_user);
             $images = $query = $this->db->query($sql);
@@ -250,9 +249,8 @@ class User extends CI_Controller{
             $u_sub = $query = $this->db->query($sql);
             $sql = "SELECT COUNT(*) AS count FROM albums WHERE id_user = ".(string)$this->db->escape($id_user);
             $albums = $query = $this->db->query($sql);
-            $this->load->view('indexHeader', array('title' => 'Профиль'));
             $this->load->view('user', array('object' => $object, 'images' => $images, 'img_count' => $images_count, 'sub_count' => $sub_count, 'u_sub' => $u_sub, 'albums' => $albums));
-            $this->load->view('indexFooter');
+            $this->load->view('footer');
         } else echo 'Такой пользователь не найден';
     }
 
@@ -297,11 +295,6 @@ class User extends CI_Controller{
             }
         }
     }
-
-    //Также необходимо, чтобы были какие-то стандартыне значения для новых пользователей и стандартные картинки фона/аватарки
-    //Можно сделать две формы, с одной кнопкой-обработчиком. При нажатии которой будем проверять если что-то в поле с картинкой
-    //есть, значит будет второй запрос к серверу, для загрузки картинки
-    //Или же можно пинать сервер с помощью аджакса, пускай загружает
 
     //Установка ip пользователя
     public function getIp(){

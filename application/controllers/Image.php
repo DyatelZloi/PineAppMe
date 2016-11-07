@@ -1,13 +1,15 @@
 <?php
 class Image extends CI_Controller{
 
-    //TODO заменить post на get_post, пример : $this->input->get_post('id_image', TRUE)
     //TODO проверки, кучу проверок.
     public function __construct(){
         parent::__construct();
         $this->load->helper(array('form', 'url'));
     }
 
+    //TODO возможно стоит разбить это всё на разделы, чтобы при клике был настоящий переход на другую страницу
+    //Это разгрузит сервер от кучи запросов, по крайней мере их станет меньше.
+    //ППц на улице всё растаяло, даже не интересно так. Хмм, теперь ты продуманно забираешь свой телефон. Хотя мог это делать и раньше
     //Получаем все картинки
     public function index(){
         $sql = "SELECT * FROM `images`";
@@ -16,7 +18,7 @@ class Image extends CI_Controller{
         $images_data2 = $query = $this->db->query($sql);
         $sql = "SELECT * FROM `images` ORDER BY images.likes DESC";
         $images_data3 = $query = $this->db->query($sql);
-        $sql = "SELECT * FROM `users` LEFT OUTER JOIN `images` USING (id_image)";
+        $sql = "SELECT path, users.id_user, name FROM `users` LEFT OUTER JOIN `images` USING (id_image)";
         $object = $this->db->query($sql);
         $this->load->view('indexHeader', array('title' => 'Все картинки'));
         $this->load->view('index',array('images_data' => $images_data, 'images_data2' => $images_data2, 'images_data3' => $images_data3, 'object' => $object));
@@ -104,6 +106,7 @@ class Image extends CI_Controller{
         } else echo 'Не введён id';
     }
 
+    //TODO таким же образом можно реализовать постраничную навигацию.
     //Получить следующую картинку
     //SELECT @n:=@n+1 AS row_number, id_image, path FROM (SELECT @n:=0, id_image, path FROM images t1 WHERE id_image>56 ORDER by id_image LIMIT 0,3) t2
     public function getNextByIdAjax($id = null){
@@ -437,6 +440,4 @@ id_image<".$this->db->escape($id_image)." ORDER by id_image DESC LIMIT 0,1) t2";
             $this->db->query($sql);
         }
     }
-
-    //Если что я немного занимался ананасом и немного занимался закупом
 }

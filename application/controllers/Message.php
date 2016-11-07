@@ -9,8 +9,15 @@ class Message extends CI_Controller{
         $this->load->library('form_validation');
     }
 
+    //TODO выборка всех подписчиков и сообщений, реализация чата.
+    //Сейчас довольно сложно делать вид, что ты работаешь. Ибо заниматься этим проектом не особо круто.
+    //У тебя уже есть наработки, просто перепили их сюда и всё будет отлично.
+    //Тут будут сообщения
     public function index(){
-        echo 'В разработке!';
+        $sql = "SELECT *,users.id_user FROM `subscribers` LEFT OUTER JOIN users USING (id_user) LEFT OUTER JOIN images USING (id_image)
+               WHERE id_subscriber = ".$this->db->escape($this->session->userdata('id_user'))." GROUP BY subscribers.id_user";
+        $users = $this->db->query($sql);
+        $this->load->view('messages', array('users' => $users));
     }
 
     //Если хочешь возвращать значение тебе неободимо сохранять запрос в отдельной переменной
@@ -31,10 +38,6 @@ class Message extends CI_Controller{
 
     }
 
-    //Нужно думать, что-то реально сложно. Оу они пойдут куда-то. Попьём чаю пока никто не видит.
-    //Получаем пока только последнее сообщение, похоже с каждым прогоном фореч массив меняется и это логично, остаётся только
-    //придумать как действительно вывести всё
-    //Если хочешь возвращать значение тебе неободимо сохранять запрос в отдельной переменной
     //Получить все сообщения
     public function getAllMessage(){
         if( $this->session->userdata('id_user')){

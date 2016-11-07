@@ -6,7 +6,7 @@
                     <div class="top-logo-wrapper">
                         <a href="<?php echo SITE_NAME?>index.php" class="header__logo-link">Iananas</a>
                         <?php if($this->session->userdata('id_user') != null):?>
-                            <a href="<?php echo SITE_NAME?>index.php/subscription/getAllSubcribers/<?php echo $this->session->userdata('id_user') ?>" class="logo__subscribers">подписки</a>
+                            <a href="<?php echo SITE_NAME?>index.php/subscription/getAllSubscription/<?php echo $this->session->userdata('id_user') ?>" class="logo__subscribers">подписки</a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -16,7 +16,7 @@
                         <?php if($this->session->userdata('id_user') != null):?>
                             <ul class="top_header_menu">
                                 <li><a href="#"><i class="fa fa-camera" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a></li>
+                                <li><a href="<?php echo SITE_NAME ?>index.php/Message"><i class="fa fa-envelope" aria-hidden="true"></i></a></li>
                                 <li><a href="#"><i class="fa fa-bell" aria-hidden="true"></i></a></li>
                                 <li>
                                     <a  id="userImage" class="img-a" href="<?php echo SITE_NAME?>index.php/user/home_page/<?php echo $this->session->userdata('id_user') ?>">
@@ -61,7 +61,7 @@
                         <i class="fa fa-arrow-right" aria-hidden="true"></i>
                         <a href="<?php echo SITE_NAME?>index.php/image/load">Загружай фото</a>
                         <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                        <a href="#">Получай призы</a>
+                        <a href="<?php echo SITE_NAME?>index.php/prizeDrawing">Получай призы</a>
                     </div>
                 </div>
             </div>
@@ -170,7 +170,6 @@
 <script>
     function chekScroll(){
         var green = document.getElementById('greenHead');
-        console.log(window.pageYOffset);
         if(window.pageYOffset >= 500){
             green.setAttribute('class','block-header2');
         }

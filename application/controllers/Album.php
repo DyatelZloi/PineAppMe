@@ -1,7 +1,6 @@
 <?php
 class Album extends CI_Controller{
 
-    //TODO заменить post на get_post, пример : $this->input->get_post('id_image', TRUE)
     //TODO проверки, кучу проверок.
     public function __construct(){
         parent::__construct();

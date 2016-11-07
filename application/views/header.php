@@ -5,6 +5,10 @@
             <meta charset="UTF-8">
             <script type="text/javascript" src="/../../js/jquery-3.1.0.min.js"></script>
             <script type="text/javascript" src="/../../js/scripts.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-auth.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-database.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js"></script>
         </head>
         <body>
             <?php if ($this->session->userdata('id_user') == null):?>
